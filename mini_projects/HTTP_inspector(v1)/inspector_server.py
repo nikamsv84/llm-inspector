@@ -2,6 +2,7 @@ import socket
 import threading
 import time
 import functools
+import HTTPRequest
 from typing import Callable, Any
 
 PORT = 8080
@@ -36,36 +37,24 @@ def handle_client(client_socket, addr, client_id):
         if not message:
             return
 
-        lines = message.splitlines()
-        if not len(lines):
-            return
+        req = HTTPRequest.HTTPRequest(message)
 
-        request_line = lines[0]
-        parts = request_line.split(" ")
-        if len(parts) >= 2:
-            method = parts[0]
-            url = parts[1]
-            http_version = parts[2] if len(parts) > 2 else "HTTP/1.1"
-
-            print("=" * 40)
-            print(f"🔍 [INSPECTED REQUEST LINE]")
-            print(f"   🔹 Method: {method}")
-            print(f"   🔹 URL/Path: {url}")
-            print(f"   🔹 Version: {http_version}")
-            print("=" * 40)
-
-        print("📋 [HTTP HEADERS]")
-        for line in lines[1:]:
-            if line.strip() == "":
-                break
-            print(f"   🔸 {line}")
-        print("=" * 40)
+        print("=" * 50)
+        print(f"[MINI-BURP INPSECTOR - CLIENT {client_id}]")
+        print(f"    ▶ Method:       {req.method}")
+        print(f"    ▶ Path:         {req.path}")
+        print(f"    ▶ Query Params: {req.query_params}")
+        print(f"    ▶ Host Header:  {req.headers.get('Host', 'Unknown')}")
+        print(f"    ▶ User-Agent:   {req.headers.get('User-Agent', 'Unknown')[:60]}...")
+        if req.body:
+            print(f"    ▶ Body Data:    {req.body}")
+        print("=" * 50)
 
         response_body = (
             "<html>"
             "<head><title>HTTP Inspector</title></head>"
             "<body style='font-family: sans-serif; text-align: center; margin-top: 50px;'>"
-            "   <h1 style='color: #2e7d32;'>Hello! 👋</h1>"
+            "   <h1 style='color: #2e7d32;'>Hello!👋</h1>"
             "   <p style='color: #555;'>Your HTTP Inspector successfully captured this request.</p>"
             "   <p>Check your server terminal to see the raw headers sent by your browser.</p>"
             "</body>"
@@ -91,7 +80,7 @@ def handle_client(client_socket, addr, client_id):
 
 def start():
     server.listen()
-    print(f"🚀 Server is listening! Open http://127.0.0.1:{PORT} in Firefox")
+    print(f"Server is listening! Open http://127.0.0.1:{PORT}")
     client_id = 0
     while True:
         client, addr = server.accept()
