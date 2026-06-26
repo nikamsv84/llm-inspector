@@ -19,21 +19,22 @@ class HTTPRequest:
         if len(parts) > 1: # if body exists (in get request for example we don't have body)
             self.body = parts[1]
 
-        lines = header_section.splitlines()
+        lines = header_section.splitlines("\r\n")
         if not lines:
             return
         request_line = lines[0]
-        request_parts = lines[0].split(" ")
+        request_parts = request_line.split(" ")
         if len(request_parts)>=2:
             self.method, full_path, *version_parts = request_parts
             self.http_version = version_parts[0] if version_parts else "HTTP/1.1"
             parsed_url = urllib.parse.urlparse(full_path)
             self.path = parsed_url.path
-            self.query_params = urllib.parse.parse_qs(parsed_url.query)
+            raw_queries = urllib.parse.parse_qs(parsed_url.query)
+            self.query_params = {k: v[0] for k, v in raw_queries.items()}
 
         for line in lines[1:]:
             if line.strip() == "":
                 continue
             if ":" in line:
                 key, value = line.split(":", 1)
-                self.headers[key.strip()] = value.strip()
+                self.headers[key.strip().lower()] = value.strip()

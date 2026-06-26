@@ -33,9 +33,24 @@ def track_uptime(func: Callable[..., Any]) -> Callable[..., Any]:
 def handle_client(client_socket, addr, client_id):
     print(f"\n[NEW CONNECTION] Client {client_id} connected from port: {addr[1]}")
     try:
-        message = client_socket.recv(4096).decode(FORMAT)
-        if not message:
+        client_socket.settimeout(3.0)
+
+        raw_bytes = b""
+
+        while b"\r\n\r\n" not in raw_bytes:
+            chunk = client_socket.recv(4096)
+            if not chunk:
+                break
+            raw_bytes += chunk
+
+            if len(raw_bytes) > 8192:
+                print(f"[!] Client {client_id} sent abnormally large headers.")
+                return
+
+        if not raw_bytes:
             return
+
+        message = raw_bytes.decode(FORMAT, errors="replace")
 
         req = HTTPRequest.HTTPRequest(message)
 
@@ -44,8 +59,8 @@ def handle_client(client_socket, addr, client_id):
         print(f"    ▶ Method:       {req.method}")
         print(f"    ▶ Path:         {req.path}")
         print(f"    ▶ Query Params: {req.query_params}")
-        print(f"    ▶ Host Header:  {req.headers.get('Host', 'Unknown')}")
-        print(f"    ▶ User-Agent:   {req.headers.get('User-Agent', 'Unknown')[:60]}...")
+        print(f"    ▶ Host Header:  {req.headers.get('host', 'Unknown')}")
+        print(f"    ▶ User-Agent:   {req.headers.get('user-agent', 'Unknown')[:60]}...")
         if req.body:
             print(f"    ▶ Body Data:    {req.body}")
         print("=" * 50)
