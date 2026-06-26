@@ -58,6 +58,7 @@ def handle_client(client_socket, addr, client_id):
         print(f"[MINI-BURP INPSECTOR - CLIENT {client_id}]")
         print(f"    ▶ Method:       {req.method}")
         print(f"    ▶ Path:         {req.path}")
+        print(f"    ▶ cookie:         {req.cookies}")
         print(f"    ▶ Query Params: {req.query_params}")
         print(f"    ▶ Host Header:  {req.headers.get('host', 'Unknown')}")
         print(f"    ▶ User-Agent:   {req.headers.get('user-agent', 'Unknown')[:60]}...")
