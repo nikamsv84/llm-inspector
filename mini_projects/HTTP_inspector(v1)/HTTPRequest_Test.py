@@ -1,6 +1,5 @@
 import unittest
-import HTTPRequest
-
+from inspector_tools import HTTPRequest
 
 class TestHTTPRequestParser(unittest.TestCase):
 
@@ -13,7 +12,7 @@ class TestHTTPRequestParser(unittest.TestCase):
             "Cookie: session_id=nika_secure_token_123; role=admin\r\n"
             "\r\n"
         )
-        req = HTTPRequest.HTTPRequest(raw_msg)
+        req =HTTPRequest(raw_msg)
 
         self.assertEqual(req.method, "GET")
         self.assertEqual(req.path, "/analyze")
@@ -32,7 +31,7 @@ class TestHTTPRequestParser(unittest.TestCase):
             "Host: localhost\r\n"
             "\r\n"
         )
-        req = HTTPRequest.HTTPRequest(raw_msg)
+        req = HTTPRequest(raw_msg)
 
         self.assertEqual(req.method, "GET")
         self.assertEqual(req.path, "/index.html")
@@ -47,7 +46,7 @@ class TestHTTPRequestParser(unittest.TestCase):
             "Authorization: Bearer 12345\r\n"
             "\r\n"
         )
-        req = HTTPRequest.HTTPRequest(raw_msg)
+        req = HTTPRequest(raw_msg)
 
         self.assertEqual(req.headers.get("host"), "127.0.0.1")
         self.assertEqual(req.headers.get("authorization"), "Bearer 12345")
@@ -62,7 +61,7 @@ class TestHTTPRequestParser(unittest.TestCase):
             "\r\n"
             "username=nika&password=123"
         )
-        req = HTTPRequest.HTTPRequest(raw_msg)
+        req =HTTPRequest(raw_msg)
 
         self.assertEqual(req.method, "POST")
         self.assertEqual(req.path, "/login")

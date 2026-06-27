@@ -1,12 +1,24 @@
 import urllib.parse
+from collections import UserDict
+from typing import Callable, Any
 
+# Custom dictionary to automatically handle case-insensitive HTTP header lookups
+class CaseInsensitiveDict(UserDict):
+    def __setitem__(self, key: str, value: Any):
+        super().__setitem__(key.lower().strip(), value)
+    def __getitem__(self, key: str):
+        return super().__getitem__(key.lower().strip())
+    def get(self, key: str, default: Any = None):
+        return super().get(key.lower().strip(), default)
+    def __contains__(self, key: str):
+        return super().__contains__(key.lower().strip())
 
 class HTTPRequest:
     def __init__(self, raw_message: str):
         self.method = ""
         self.path = ""
         self.http_version = ""
-        self.headers = {}
+        self.headers = CaseInsensitiveDict()
         self.query_params = {}
         self.body = ""
 
@@ -41,7 +53,7 @@ class HTTPRequest:
                 continue
             if ":" in line:
                 key, value = line.split(":", 1)
-                self.headers[key.strip().lower()] = value.strip()
+                self.headers[key] = value.strip()
 
     @property
     def cookies(self) -> dict:

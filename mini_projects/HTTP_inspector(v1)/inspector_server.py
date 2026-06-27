@@ -2,14 +2,22 @@ import socket
 import threading
 import time
 import functools
-import HTTPRequest
+from inspector_tools import HTTPRequest, JSONLogger, Security_Analyzer
 from typing import Callable, Any
 
 PORT = 8080
 FORMAT = "utf-8"
-
 SERVER_IP = "0.0.0.0"
+RED = "\033[91m"
+RESET = "\033[0m"
+
+
+file_logger = JSONLogger("requests_log.json")
+security_analyze = Security_Analyzer()
+
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind((SERVER_IP, PORT))
 
 
@@ -52,7 +60,7 @@ def handle_client(client_socket, addr, client_id):
 
         message = raw_bytes.decode(FORMAT, errors="replace")
 
-        req = HTTPRequest.HTTPRequest(message)
+        req = HTTPRequest(message)
 
         print("=" * 50)
         print(f"[MINI-BURP INPSECTOR - CLIENT {client_id}]")
@@ -64,7 +72,19 @@ def handle_client(client_socket, addr, client_id):
         print(f"    ▶ User-Agent:   {req.headers.get('user-agent', 'Unknown')[:60]}...")
         if req.body:
             print(f"    ▶ Body Data:    {req.body}")
-        print("=" * 50)
+        print(f"{RED}" + "=" * 50 + f"{RESET}")
+        file_logger.log_request(req)
+        security_result = security_analyze.analyze(req)
+
+        if not security_result["is_secure"]:
+
+            clean_patterns = ", ".join(security_result["matched_patterns"])
+
+            print(f"{RED}[🚨 SECURITY ALERT] Malicious Request Detected!{RESET}")
+            print(f"{RED}    ▶ Attack Type:      {security_result['attack_type']}{RESET}")
+            print(f"{RED}    ▶ Matched Patterns: {clean_patterns}{RESET}")
+            print(f"{RED}" + "=" * 50 + f"{RESET}")
+
 
         response_body = (
             "<html>"

@@ -1,0 +1,225 @@
+[
+    {
+        "time": "2026-06-27 12:12:20.733893",
+        "method": "GET",
+        "path": "/search",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "upgrade-insecure-requests": "1",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "priority": "u=0, i"
+        },
+        "query params": {
+            "target": "vulnerable-app",
+            "scan": "true"
+        },
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-06-27 12:16:10.544692",
+        "method": "GET",
+        "path": "/search",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "upgrade-insecure-requests": "1",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "priority": "u=0, i",
+            "pragma": "no-cache",
+            "cache-control": "no-cache"
+        },
+        "query params": {
+            "target": "vulnerable-app",
+            "scan": "true"
+        },
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-06-27 12:16:10.672352",
+        "method": "GET",
+        "path": "/favicon.ico",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "referer": "http://127.0.0.1:8080/search?target=vulnerable-app&scan=true",
+            "sec-fetch-dest": "image",
+            "sec-fetch-mode": "no-cors",
+            "sec-fetch-site": "same-origin",
+            "priority": "u=6",
+            "pragma": "no-cache",
+            "cache-control": "no-cache"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-06-27 12:16:45.828537",
+        "method": "GET",
+        "path": "/search",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "cookie": "session_id=nika_secure_123",
+            "upgrade-insecure-requests": "1",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "priority": "u=0, i",
+            "pragma": "no-cache",
+            "cache-control": "no-cache"
+        },
+        "query params": {
+            "target": "vulnerable-app",
+            "scan": "true"
+        },
+        "body": "",
+        "cookie": {
+            "session_id": "nika_secure_123"
+        }
+    },
+    {
+        "time": "2026-06-27 12:16:45.878987",
+        "method": "GET",
+        "path": "/favicon.ico",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "referer": "http://127.0.0.1:8080/search?target=vulnerable-app&scan=true",
+            "cookie": "session_id=nika_secure_123",
+            "sec-fetch-dest": "image",
+            "sec-fetch-mode": "no-cors",
+            "sec-fetch-site": "same-origin",
+            "priority": "u=6",
+            "pragma": "no-cache",
+            "cache-control": "no-cache"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {
+            "session_id": "nika_secure_123"
+        }
+    },
+    {
+        "time": "2026-06-27 18:54:46.466769",
+        "method": "GET",
+        "path": "/search",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "cookie": "session_id=nika_secure_123",
+            "upgrade-insecure-requests": "1",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "priority": "u=0, i"
+        },
+        "query params": {
+            "user_input": "nika' or 1=1 --",
+            "status": "<script>alert(1)</script>"
+        },
+        "body": "",
+        "cookie": {
+            "session_id": "nika_secure_123"
+        }
+    },
+    {
+        "time": "2026-06-27 18:55:28.250672",
+        "method": "GET",
+        "path": "/search",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "cookie": "session_id=nika_secure_123",
+            "upgrade-insecure-requests": "1",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "priority": "u=0, i"
+        },
+        "query params": {
+            "user_input": "nika' or 1=1 --",
+            "status": "<script>alert(1)</script>"
+        },
+        "body": "",
+        "cookie": {
+            "session_id": "nika_secure_123"
+        }
+    },
+    {
+        "time": "2026-06-27 18:55:49.010959",
+        "method": "GET",
+        "path": "/search",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "127.0.0.1:8080",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "connection": "keep-alive",
+            "cookie": "session_id=nika_secure_123",
+            "upgrade-insecure-requests": "1",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "priority": "u=0, i"
+        },
+        "query params": {
+            "user_input": "nika' or 1=1 --",
+            "status": "<script>alert(1)</script>"
+        },
+        "body": "",
+        "cookie": {
+            "session_id": "nika_secure_123"
+        }
+    }
+]

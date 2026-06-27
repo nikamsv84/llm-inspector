@@ -1,1 +1,1 @@
-http://127.0.0.1:8080
+Mini HTTP Inspector (Burp-like Prototype)
