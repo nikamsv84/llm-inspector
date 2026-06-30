@@ -1,0 +1,10 @@
+.venv/
+
+mini_projects/HTTP_inspector(v1)/requests_log.json
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+exercises/
