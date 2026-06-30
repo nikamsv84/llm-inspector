@@ -1,6 +1,6 @@
 .venv/
 
-mini_projects/HTTP_inspector(v1)/requests_log.json
+mini_projects/mini_burp_suite/requests_log.json
 
 __pycache__/
 *.pyc
