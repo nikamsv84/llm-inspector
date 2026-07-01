@@ -1,5 +1,6 @@
 import urllib.parse
 from collections import UserDict
+from curses.ascii import isalnum
 from typing import Callable, Any
 
 # Custom dictionary to automatically handle case-insensitive HTTP header lookups
@@ -21,6 +22,8 @@ class HTTPRequest:
         self.headers = CaseInsensitiveDict()
         self.query_params = {}
         self.body = ""
+        self.target_host = ""
+        self.target_port = ""
 
         if raw_message:
             self._parse(raw_message)
@@ -55,6 +58,15 @@ class HTTPRequest:
                 key, value = line.split(":", 1)
                 self.headers[key] = value.strip()
 
+        initial_host, *initial_port = self.headers.get("host", "").split(":")
+        self.target_host = initial_host
+
+        if initial_port:
+            self.target_port = int(initial_port[0])
+        else:
+            self.target_port = 80
+
+
     @property
     def cookies(self) -> dict:
         cookie_header = self.headers.get("cookie", "")
@@ -69,3 +81,32 @@ class HTTPRequest:
                 cookie_dict[key.strip().lower()] = value.strip()
 
         return cookie_dict
+
+
+if __name__ == "__main__":
+
+    sample_request_with_port = (
+        "GET /search HTTP/1.1\r\n"
+        "Host: 127.0.0.1:8080\r\n"
+        "User-Agent: Mozilla/5.0\r\n"
+        "\r\n"
+    )
+
+    req1 = HTTPRequest(sample_request_with_port)
+    print("[Test 1 - Custom Port]")
+    print(f"Target Host: {req1.target_host}")
+    print(f"Target Port: {req1.target_port} (Type: {type(req1.target_port).__name__})")  # باید چاپ کند: 8080 (int)
+    print("-" * 30)
+
+    sample_request_no_port = (
+        "GET /index.html HTTP/1.1\r\n"
+        "Host: example.com\r\n"
+        "Accept: text/html\r\n"
+        "\r\n"
+    )
+
+    req2 = HTTPRequest(sample_request_no_port)
+    print("[Test 2 - Default Port]")
+    print(f"Target Host: {req2.target_host}")  #  example.com
+    print(f"Target Port: {req2.target_port}")  #  80
+    print("-" * 30)

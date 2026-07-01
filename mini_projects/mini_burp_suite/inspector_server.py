@@ -86,27 +86,35 @@ def handle_client(client_socket, addr, client_id):
             print(f"{RED}" + "=" * 50 + f"{RESET}")
 
 
-        response_body = (
-            "<html>"
-            "<head><title>HTTP Inspector</title></head>"
-            "<body style='font-family: sans-serif; text-align: center; margin-top: 50px;'>"
-            "   <h1 style='color: #2e7d32;'>Hello!👋</h1>"
-            "   <p style='color: #555;'>Your HTTP Inspector successfully captured this request.</p>"
-            "   <p>Check your server terminal to see the raw headers sent by your browser.</p>"
-            "</body>"
-            "</html>"
-        )
 
-        response_headers = (
-            "HTTP/1.1 200 OK\r\n"
-            "Content-Type: text/html; charset=utf-8\r\n"
-            f"Content-Length: {len(response_body.encode(FORMAT))}\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-        )
+        target = (req.target_host, req.target_port)
+        if target == (SERVER_IP, PORT) or target == ("127.0.0.1", PORT):
+            print(f"[!] Blocked an infinite loop request to ourselves: {target}")
+            client_socket.sendall(b"HTTP/1.1 400 Bad Request\r\n\r\nCannot proxy to myself.")
+            return
+        #server represents the act of client here:
+        mitm_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        mitm_socket.connect(target)
+        mitm_socket.sendall(raw_bytes)
 
-        full_response = response_headers + response_body
-        client_socket.sendall(full_response.encode(FORMAT))
+        mitm_socket.settimeout(2.0)
+
+        try:
+            while True:
+                response_chunk = mitm_socket.recv(4096)
+
+                if not response_chunk:
+                    break
+
+                client_socket.sendall(response_chunk)
+
+        except socket.timeout:
+            pass
+        finally:
+            mitm_socket.close()
+
+
+
 
     except Exception as e:
         print(f"Error: {e}")
