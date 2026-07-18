@@ -35,3 +35,12 @@ An architectural leap transitioning the project from a passive listener into an 
 * **Bi-directional Data Streaming**: Implements real-time chunk-by-chunk response streaming from remote web servers directly back to the active client socket.
 
 ---
+## 🔄 Development Process
+
+This project follows an issue-driven development workflow:
+
+1. **Idea → Issue** — Every new feature or fix starts as a GitHub issue with a clear objective and a checklist of tasks.
+2. **Research** — Before writing any code, I study the concepts and stack involved to make sure I understand *why*, not just *how*.
+3. **Branch** — Each issue is implemented on its own feature branch, keeping `main` always stable and deployable.
+4. **Implement & Test** — Code is written and verified locally before being committed.
+5. **Pull Request → Merge** — Once the work is complete, it's merged via a Pull Request that closes the related issue, keeping a clean and traceable history.
