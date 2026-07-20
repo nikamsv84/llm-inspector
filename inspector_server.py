@@ -4,7 +4,6 @@ import time
 import functools
 from inspector_tools import HTTPRequest, JSONLogger, Security_Analyzer
 from typing import Callable, Any
-from dashboard.core import proxy_state
 
 PORT = 8080
 FORMAT = "utf-8"
@@ -96,24 +95,7 @@ def handle_client(client_socket, addr, client_id):
         #server represents the act of client here:
         mitm_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Check if intercept mode is enabled in the shared state
-        if proxy_state["intercept_enabled"]:
-            proxy_state["current_request"] = message
-            proxy_state["action"] = "waiting"
 
-        while proxy_state["action"] == "waiting":
-            time.sleep(0.1)
-
-        # Discard the request and close connection if user clicks DROP
-        if proxy_state["action"] == "drop":
-            print(f"[❌ DROP] Request from client {client_id} was dropped by user.")
-            client_socket.close()
-            return
-
-            # Replace the original packet with the modified version if user clicks FORWARD
-        elif proxy_state["action"] == "forward":
-            if proxy_state["modified_request_bytes"]:
-                raw_bytes = proxy_state["modified_request_bytes"]
 
         mitm_socket.connect(target)
         mitm_socket.sendall(raw_bytes)
