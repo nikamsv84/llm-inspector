@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
-from core import proxy_state
 
 app = FastAPI(title="Mini Burp Suite Dashboard")
 
