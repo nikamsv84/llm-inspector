@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS raw_requests (
     port INTEGER NOT NULL,
     path TEXT NOT NULL,
     headers JSONB NOT NULL,
-    raw_bytes BYTEA NOT NULLc
+    raw_bytes BYTEA NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS intercept_queue (

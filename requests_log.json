@@ -300,5 +300,230 @@
         "query params": {},
         "body": "",
         "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:11:56.518480",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:17:06.428181",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:19:07.218414",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:27:10.777771",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "push.services.mozilla.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:27:43.219480",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:28:14.828012",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 19:29:14.364601",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 20:28:31.525953",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 20:33:46.654298",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 20:35:40.732656",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 20:48:09.802241",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 20:59:45.283844",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 21:00:36.572332",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 21:02:54.731095",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-21 21:08:58.914146",
+        "method": "GET",
+        "path": "/get",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "httpbin.org",
+            "user-agent": "curl/8.5.0",
+            "accept": "*/*",
+            "proxy-connection": "Keep-Alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
     }
 ]
