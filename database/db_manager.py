@@ -64,9 +64,8 @@ def wait_for_user_action(request_id: int, timeout: float = 300.0) -> str:
                     cur.execute(query, (request_id,))
                     row = cur.fetchone()
                     if row and row[0] != 'pending':
-                        return row[0]  # وضعیت جدید (forwarded / dropped) رو برگردون
+                        return row[0]
 
-        # خواندن وضعیت نهایی از دیتابیس
         query = "SELECT status FROM intercept_queue WHERE request_id = %s;"
         with pool.connection() as conn:
             with conn.cursor() as cur:
