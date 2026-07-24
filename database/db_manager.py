@@ -1,13 +1,17 @@
 import json
 import os
+import sys
 from pathlib import Path
 import threading
 import time
 from typing import Optional
-
 from dotenv import load_dotenv
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
 from inspector_tools import HTTPRequest
 from psycopg_pool import ConnectionPool
+from psycopg.rows import dict_row
+
 
 # Thread-safe registry for active intercept events
 intercept_events: dict[int, threading.Event] = {}
@@ -17,7 +21,7 @@ events_lock = threading.Lock()
 load_dotenv()
 
 DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
+DB_PORT = os.getenv("DB_PORT", "5433")
 DB_NAME = os.getenv("DB_NAME", "backend_lab")
 DB_USER = os.getenv("DB_USER", "postgres")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
@@ -27,6 +31,48 @@ CONN_INFO = f"host={DB_HOST} port={DB_PORT} dbname={DB_NAME} user={DB_USER} pass
 # Initialize ConnectionPool
 pool = ConnectionPool(conninfo=CONN_INFO, min_size=2, max_size=5, open=False)
 
+
+def get_pending_intercepts():
+    """Receiving the list of pending requests for CLI / Web Dashboard."""
+    query = """
+        SELECT i.id AS queue_id, r.id AS request_id, r.method, r.host, r.port, r.path, r.headers, r.raw_bytes
+        FROM intercept_queue i
+        JOIN raw_requests r ON i.request_id = r.id
+        WHERE i.status = 'pending'
+        ORDER BY i.id ASC;
+    """
+    with pool.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(query)
+            return cur.fetchall()
+
+def save_modified_request(
+    request_id: int, method: str, path: str, headers: dict, raw_bytes: bytes
+):
+    """Saves modified request bytes and metadata into modified_requests table."""
+    query = """
+        INSERT INTO modified_requests (request_id, method, path, headers, raw_bytes)
+        VALUES (%s, %s, %s, %s, %s)
+        ON CONFLICT (request_id) 
+        DO UPDATE SET 
+            method = EXCLUDED.method,
+            path = EXCLUDED.path,
+            headers = EXCLUDED.headers,
+            raw_bytes = EXCLUDED.raw_bytes;
+    """
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                query,
+                (
+                    request_id,
+                    method,
+                    path,
+                    json.dumps(headers),
+                    raw_bytes,
+                ),
+            )
+            conn.commit()
 
 def create_intercept_entry(request_id: int) -> int:
     """Inserts a new pending entry into intercept_queue and returns queue_id."""
