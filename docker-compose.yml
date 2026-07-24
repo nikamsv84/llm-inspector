@@ -1,0 +1,37 @@
+services:
+  app:
+    build: .
+    stdin_open: true
+    tty: true
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for the database to be fully ready to accept connections
+    environment:
+      - PYTHONPATH=/app # Ensures internal modules like inspector_tools are discoverable
+      - DB_HOST=postgres # Database service hostname within the Docker network
+      - DB_PORT=5432 # Internal PostgreSQL port (not the mapped 5433 host port)
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+  postgres:
+    image: postgres:16-trixie
+    ports:
+      - "5433:5432" # Maps port 5433 on the host machine to port 5432 inside the container
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema/tables.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:

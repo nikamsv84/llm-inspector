@@ -82,6 +82,9 @@ def handle_client(client_socket, addr, client_id):
 
             if len(raw_bytes) > 8192:
                 print(f"[!] Client {client_id} sent abnormally large headers.")
+                client_socket.sendall(
+                    b"HTTP/1.1 431 Request Header Fields Too Large\r\n\r\nHeaders exceeded maximum allowed size."
+                )
                 return
 
         if not raw_bytes:
@@ -160,7 +163,17 @@ def handle_client(client_socket, addr, client_id):
             modified_bytes if modified_bytes is not None else raw_bytes
         )
 
-        target = (req.target_host, req.target_port)
+        # 5. Fetch modified bytes if available in database
+        modified_bytes = get_modified_request_bytes(request_id)
+
+        if modified_bytes:
+            payload_to_send = modified_bytes
+            modified_req = HTTPRequest(modified_bytes.decode(FORMAT, errors="replace"))
+            target = (modified_req.target_host, modified_req.target_port)
+        else:
+            payload_to_send = raw_bytes
+            target = (req.target_host, req.target_port)
+
         if target == (SERVER_IP, PORT) or target == ("127.0.0.1", PORT):
             print(f"[!] Blocked an infinite loop request to ourselves: {target}")
             client_socket.sendall(

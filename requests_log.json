@@ -1,338 +1,44 @@
 [
     {
-        "time": "2026-06-27 12:12:20.733893",
+        "time": "2026-07-22 16:02:36.291614",
         "method": "GET",
-        "path": "/search",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "upgrade-insecure-requests": "1",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "priority": "u=0, i"
-        },
-        "query params": {
-            "target": "vulnerable-app",
-            "scan": "true"
-        },
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-06-27 12:16:10.544692",
-        "method": "GET",
-        "path": "/search",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "upgrade-insecure-requests": "1",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "priority": "u=0, i",
-            "pragma": "no-cache",
-            "cache-control": "no-cache"
-        },
-        "query params": {
-            "target": "vulnerable-app",
-            "scan": "true"
-        },
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-06-27 12:16:10.672352",
-        "method": "GET",
-        "path": "/favicon.ico",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "referer": "http://127.0.0.1:8080/search?target=vulnerable-app&scan=true",
-            "sec-fetch-dest": "image",
-            "sec-fetch-mode": "no-cors",
-            "sec-fetch-site": "same-origin",
-            "priority": "u=6",
-            "pragma": "no-cache",
-            "cache-control": "no-cache"
-        },
-        "query params": {},
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-06-27 12:16:45.828537",
-        "method": "GET",
-        "path": "/search",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "cookie": "session_id=nika_secure_123",
-            "upgrade-insecure-requests": "1",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "priority": "u=0, i",
-            "pragma": "no-cache",
-            "cache-control": "no-cache"
-        },
-        "query params": {
-            "target": "vulnerable-app",
-            "scan": "true"
-        },
-        "body": "",
-        "cookie": {
-            "session_id": "nika_secure_123"
-        }
-    },
-    {
-        "time": "2026-06-27 12:16:45.878987",
-        "method": "GET",
-        "path": "/favicon.ico",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "referer": "http://127.0.0.1:8080/search?target=vulnerable-app&scan=true",
-            "cookie": "session_id=nika_secure_123",
-            "sec-fetch-dest": "image",
-            "sec-fetch-mode": "no-cors",
-            "sec-fetch-site": "same-origin",
-            "priority": "u=6",
-            "pragma": "no-cache",
-            "cache-control": "no-cache"
-        },
-        "query params": {},
-        "body": "",
-        "cookie": {
-            "session_id": "nika_secure_123"
-        }
-    },
-    {
-        "time": "2026-06-27 18:54:46.466769",
-        "method": "GET",
-        "path": "/search",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "cookie": "session_id=nika_secure_123",
-            "upgrade-insecure-requests": "1",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "priority": "u=0, i"
-        },
-        "query params": {
-            "user_input": "nika' or 1=1 --",
-            "status": "<script>alert(1)</script>"
-        },
-        "body": "",
-        "cookie": {
-            "session_id": "nika_secure_123"
-        }
-    },
-    {
-        "time": "2026-06-27 18:55:28.250672",
-        "method": "GET",
-        "path": "/search",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "cookie": "session_id=nika_secure_123",
-            "upgrade-insecure-requests": "1",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "priority": "u=0, i"
-        },
-        "query params": {
-            "user_input": "nika' or 1=1 --",
-            "status": "<script>alert(1)</script>"
-        },
-        "body": "",
-        "cookie": {
-            "session_id": "nika_secure_123"
-        }
-    },
-    {
-        "time": "2026-06-27 18:55:49.010959",
-        "method": "GET",
-        "path": "/search",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "127.0.0.1:8080",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "connection": "keep-alive",
-            "cookie": "session_id=nika_secure_123",
-            "upgrade-insecure-requests": "1",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "priority": "u=0, i"
-        },
-        "query params": {
-            "user_input": "nika' or 1=1 --",
-            "status": "<script>alert(1)</script>"
-        },
-        "body": "",
-        "cookie": {
-            "session_id": "nika_secure_123"
-        }
-    },
-    {
-        "time": "2026-07-01 09:37:18.830545",
-        "method": "GET",
-        "path": "/",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "neverssl.com",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate",
-            "connection": "keep-alive",
-            "upgrade-insecure-requests": "1",
-            "priority": "u=0, i"
-        },
-        "query params": {},
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-07-01 09:37:27.293238",
-        "method": "GET",
-        "path": "/",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "innermajesticastoundinglight.neverssl.com",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
             "accept-language": "en-US,en;q=0.9",
             "accept-encoding": "gzip, deflate",
-            "connection": "keep-alive",
-            "priority": "u=4",
+            "cache-control": "no-cache",
             "pragma": "no-cache",
-            "cache-control": "no-cache"
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-01 09:39:41.812059",
+        "time": "2026-07-22 16:03:11.259774",
         "method": "GET",
-        "path": "/",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "innermajesticastoundinglight.neverssl.com",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
             "accept-language": "en-US,en;q=0.9",
             "accept-encoding": "gzip, deflate",
-            "connection": "keep-alive",
-            "priority": "u=4",
+            "cache-control": "no-cache",
             "pragma": "no-cache",
-            "cache-control": "no-cache"
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-01 09:41:56.979939",
-        "method": "GET",
-        "path": "/",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "innermajesticastoundinglight.neverssl.com",
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0",
-            "accept": "*/*",
-            "accept-language": "en-US,en;q=0.9",
-            "accept-encoding": "gzip, deflate",
-            "connection": "keep-alive",
-            "priority": "u=4",
-            "pragma": "no-cache",
-            "cache-control": "no-cache"
-        },
-        "query params": {},
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-07-21 19:11:56.518480",
-        "method": "GET",
-        "path": "/get",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
-            "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
-        },
-        "query params": {},
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-07-21 19:17:06.428181",
-        "method": "GET",
-        "path": "/get",
-        "http_version": "HTTP/1.1",
-        "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
-            "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
-        },
-        "query params": {},
-        "body": "",
-        "cookie": {}
-    },
-    {
-        "time": "2026-07-21 19:19:07.218414",
+        "time": "2026-07-22 16:03:14.970308",
         "method": "CONNECT",
         "path": "443",
         "http_version": "HTTP/1.1",
@@ -347,7 +53,311 @@
         "cookie": {}
     },
     {
-        "time": "2026-07-21 19:27:10.777771",
+        "time": "2026-07-22 16:03:16.294183",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:03:21.296223",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:03:26.297535",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:03:31.410764",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:03:36.411616",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:04:11.267210",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:04:16.268111",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:04:21.269013",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:04:26.271103",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:04:31.272200",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:04:36.272904",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:05:11.270898",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:05:16.272126",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:05:21.273246",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:05:26.275437",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:05:31.292628",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:05:31.294152",
         "method": "CONNECT",
         "path": "443",
         "http_version": "HTTP/1.1",
@@ -362,7 +372,254 @@
         "cookie": {}
     },
     {
-        "time": "2026-07-21 19:27:43.219480",
+        "time": "2026-07-22 16:05:36.293524",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:06:11.274415",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:06:16.275565",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:06:21.275938",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:06:26.277439",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:06:31.278624",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:06:36.280293",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:11.279822",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:16.281008",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:21.282617",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:26.283442",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:31.284758",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:36.285848",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:07:51.009390",
         "method": "CONNECT",
         "path": "443",
         "http_version": "HTTP/1.1",
@@ -377,150 +634,2043 @@
         "cookie": {}
     },
     {
-        "time": "2026-07-21 19:28:14.828012",
+        "time": "2026-07-22 16:08:11.426568",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 19:29:14.364601",
+        "time": "2026-07-22 16:08:16.486099",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 20:28:31.525953",
+        "time": "2026-07-22 16:08:21.488480",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 20:33:46.654298",
+        "time": "2026-07-22 16:08:26.489601",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 20:35:40.732656",
+        "time": "2026-07-22 16:08:31.491245",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 20:48:09.802241",
+        "time": "2026-07-22 16:08:36.492095",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 20:59:45.283844",
-        "method": "GET",
-        "path": "/get",
+        "time": "2026-07-22 16:11:11.428812",
+        "method": "CONNECT",
+        "path": "443",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
-            "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "push.services.mozilla.com:443"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 21:00:36.572332",
+        "time": "2026-07-22 16:13:11.453810",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 21:02:54.731095",
+        "time": "2026-07-22 16:13:16.486593",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
         },
         "query params": {},
         "body": "",
         "cookie": {}
     },
     {
-        "time": "2026-07-21 21:08:58.914146",
+        "time": "2026-07-22 16:13:21.570638",
         "method": "GET",
-        "path": "/get",
+        "path": "/canonical.html",
         "http_version": "HTTP/1.1",
         "headers": {
-            "host": "httpbin.org",
-            "user-agent": "curl/8.5.0",
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "accept": "*/*",
-            "proxy-connection": "Keep-Alive"
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:13:26.778952",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:13:32.046971",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:13:37.048634",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:16:27.009714",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:18:12.054507",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:18:17.077983",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:18:22.080590",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:18:27.081992",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:18:32.083638",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:18:37.085917",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:22:11.807586",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "push.services.mozilla.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:23:13.580665",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:23:18.613560",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:23:23.616768",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:23:28.617953",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:23:33.618961",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:23:38.620516",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:25:03.012751",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:28:16.935619",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:28:21.979222",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:28:26.981122",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:28:31.983215",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:28:37.158221",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:28:42.159367",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:18.797596",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:23.972664",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:28.974968",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:33.976284",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:38.977834",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:39.013425",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:33:43.979146",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:38:18.803595",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:38:23.826692",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:38:28.829177",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:38:33.830535",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:38:38.837743",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:38:43.839378",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:42:15.013974",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:19.468836",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:24.505344",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:29.507274",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:34.508048",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:39.509046",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:44.510318",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:43:54.473714",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "push.services.mozilla.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:48:20.455196",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:48:25.666989",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:48:30.668809",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:48:35.669945",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:48:40.670939",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:48:45.672058",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:50:51.015934",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:53:23.639986",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:53:28.680012",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:53:33.681759",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:53:38.688731",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:53:43.690339",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:53:48.694919",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:58:23.981788",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:58:29.001830",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:58:34.003891",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:58:39.004989",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:58:44.006590",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:58:49.007784",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:59:27.017782",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 16:59:47.330278",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:00:09.098171",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:00:31.080546",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:00:52.133849",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:01:13.713502",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:01:36.083340",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:01:59.636608",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:02:24.967143",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:04:32.049366",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:09:08.845146",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:14:17.826041",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "push.services.mozilla.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:14:55.467167",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:15:15.758669",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:15:36.617679",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:15:58.705175",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:16:19.683292",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:16:41.151038",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:17:03.350911",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:17:40.068629",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:18:27.864057",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:18:43.720899",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:18:44.265257",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:19:12.508826",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:19:43.724111",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:20:20.615131",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:21:08.999688",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:22:08.291748",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:24.039380",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:25.128672",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:29.077722",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:34.073106",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:39.075155",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:44.076111",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:23:49.077116",
+        "method": "GET",
+        "path": "/canonical.html",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "host": "detectportal.firefox.com",
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "accept-encoding": "gzip, deflate",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "connection": "keep-alive"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:24:45.130169",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:26:05.234613",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:27:25.439694",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:28:45.442365",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:30:07.460287",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:31:27.461629",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:32:47.464723",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
+        },
+        "query params": {},
+        "body": "",
+        "cookie": {}
+    },
+    {
+        "time": "2026-07-22 17:34:12.471020",
+        "method": "CONNECT",
+        "path": "443",
+        "http_version": "HTTP/1.1",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+            "proxy-connection": "keep-alive",
+            "connection": "keep-alive",
+            "host": "alive.github.com:443"
         },
         "query params": {},
         "body": "",

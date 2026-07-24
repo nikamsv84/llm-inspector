@@ -48,3 +48,4 @@ We selected **`psycopg3`** with `psycopg_pool.ConnectionPool` over SQLAlchemy OR
 * Managing thread-safe connection pools in Python.
 * Structuring PostgreSQL queries with `RETURNING id` for cross-table primary key resolution.
 * Using non-blocking thread synchronization mechanisms (`threading.Event`) instead of CPU-intensive loops.
+---
