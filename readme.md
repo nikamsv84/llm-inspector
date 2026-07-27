@@ -10,7 +10,7 @@ You can explore the evolution of this project step-by-step. Navigate to the **Re
 
 - [x] **v1.0.0 - HTTP Inspector**: Basic socket listener capable of capturing, parsing, and logging raw HTTP requests.
 - [x] **v2.0.0 - MITM Forward Proxy (Current)**: Dynamic target routing, loop prevention, multi-threading, and live bi-directional data streaming.
-- [ ] **v3.0.0 - Request/Response Modifier**: Packet intercepting mechanism to pause, modify, or drop headers/bodies before forwarding.
+- [x] **v3.0.0 - Request/Response Modifier**: Packet intercepting mechanism to pause, modify, or drop headers/bodies before forwarding.
 - [ ] **v4.0.0 - Dashboard (FastAPI)**: Web interface to monitor live logs, view security statistics, and handle intercept UI using asynchronous tasks.
 - [x] **v5.0.0 - Database & Containerization**: Porting JSON logs to SQLite/PostgreSQL and containerizing the entire stack via Docker.
 - [ ] **v6.0.0 - HTTPS Interception (SSL/TLS)**: Implementing `CONNECT` tunneling and dynamic certificate generation to audit encrypted traffic.
