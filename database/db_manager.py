@@ -2,22 +2,22 @@ import json
 import os
 import sys
 from pathlib import Path
-import threading
-import time
+import asyncio
 from typing import Optional
 from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
+
 from inspector_tools import HTTPRequest
-from psycopg_pool import ConnectionPool
+from psycopg_pool import AsyncConnectionPool
 from psycopg.rows import dict_row
 
+# Async-safe registry for active intercept events using asyncio.Event
+intercept_events: dict[int, asyncio.Event] = {}
+events_lock = asyncio.Lock()
 
-# Thread-safe registry for active intercept events
-intercept_events: dict[int, threading.Event] = {}
-events_lock = threading.Lock()
-
-# Load environment variables
+# Load environment variable
 load_dotenv()
 
 DB_HOST = os.getenv("DB_HOST", "localhost")
@@ -28,11 +28,38 @@ DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 
 CONN_INFO = f"host={DB_HOST} port={DB_PORT} dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}"
 
-# Initialize ConnectionPool
-pool = ConnectionPool(conninfo=CONN_INFO, min_size=2, max_size=5, open=False)
+# Initialize AsyncConnectionPool
+pool = AsyncConnectionPool(conninfo=CONN_INFO, min_size=2, max_size=5, open=False)
 
 
-def get_pending_intercepts():
+async def open_pool():
+    """Opens the database connection pool asynchronously."""
+    await pool.open()
+    print("🔌 Database connection pool opened.")
+
+
+async def close_pool():
+    """Closes all connections in the pool safely."""
+    await pool.close()
+    print("🔌 Database connection pool closed.")
+
+
+async def init_db():
+    """Connect to the database using the connection pool and execute the tables.sql script."""
+    BASE_DIR = Path(__file__).resolve().parent
+    schema_path = BASE_DIR / "schema" / "tables.sql"
+
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            with open(schema_path, "r", encoding="utf-8") as file:
+                make_table = file.read()
+
+            await cur.execute(make_table)
+            await conn.commit()
+            print("✅ tables.sql script executed successfully.")
+
+
+async def get_pending_intercepts():
     """Receiving the list of pending requests for CLI / Web Dashboard."""
     query = """
         SELECT i.id AS queue_id, r.id AS request_id, r.method, r.host, r.port, r.path, r.headers, r.raw_bytes
@@ -41,12 +68,13 @@ def get_pending_intercepts():
         WHERE i.status = 'pending'
         ORDER BY i.id ASC;
     """
-    with pool.connection() as conn:
-        with conn.cursor(row_factory=dict_row) as cur:
-            cur.execute(query)
-            return cur.fetchall()
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            await cur.execute(query)
+            return await cur.fetchall()
 
-def save_modified_request(
+
+async def save_modified_request(
     request_id: int, method: str, path: str, headers: dict, raw_bytes: bytes
 ):
     """Saves modified request bytes and metadata into modified_requests table."""
@@ -60,9 +88,9 @@ def save_modified_request(
             headers = EXCLUDED.headers,
             raw_bytes = EXCLUDED.raw_bytes;
     """
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
                 query,
                 (
                     request_id,
@@ -72,58 +100,64 @@ def save_modified_request(
                     raw_bytes,
                 ),
             )
-            conn.commit()
+            await conn.commit()
 
-def create_intercept_entry(request_id: int) -> int:
+
+async def create_intercept_entry(request_id: int) -> int:
     """Inserts a new pending entry into intercept_queue and returns queue_id."""
     query = """
         INSERT INTO intercept_queue (request_id, status)
         VALUES (%s, 'pending')
         RETURNING id;
     """
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, (request_id,))
-            queue_id = cur.fetchone()[0]
-            conn.commit()
-            return queue_id
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(query, (request_id,))
+            row = await cur.fetchone()
+            await conn.commit()
+            return row[0]
 
 
-def wait_for_user_action(request_id: int, timeout: float = 300.0) -> str:
+async def wait_for_user_action(request_id: int, timeout: float = 300.0) -> str:
     """
-    Blocks until released via in-memory threading.Event OR database status change.
+    Asynchronously waits until released via in-memory asyncio.Event OR database status change.
     """
-    event = threading.Event()
+    event = asyncio.Event()
 
-    with events_lock:
+    async with events_lock:
         intercept_events[request_id] = event
 
     try:
-        start_time = time.time()
-        while time.time() - start_time < timeout:
-            if event.wait(timeout=0.5):
+        start_time = asyncio.get_event_loop().time()
+        while (asyncio.get_event_loop().time() - start_time) < timeout:
+            try:
+                # Non-blocking async wait for 0.5s chunks
+                await asyncio.wait_for(event.wait(), timeout=0.5)
                 break
+            except asyncio.TimeoutError:
+                pass
 
             query = "SELECT status FROM intercept_queue WHERE request_id = %s;"
-            with pool.connection() as conn:
-                with conn.cursor() as cur:
-                    cur.execute(query, (request_id,))
-                    row = cur.fetchone()
+            async with pool.connection() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute(query, (request_id,))
+                    row = await cur.fetchone()
                     if row and row[0] != 'pending':
                         return row[0]
 
         query = "SELECT status FROM intercept_queue WHERE request_id = %s;"
-        with pool.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(query, (request_id,))
-                row = cur.fetchone()
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(query, (request_id,))
+                row = await cur.fetchone()
                 return row[0] if row else "forwarded"
 
     finally:
-        with events_lock:
+        async with events_lock:
             intercept_events.pop(request_id, None)
 
-def release_intercepted_request(request_id: int, action: str) -> bool:
+
+async def release_intercepted_request(request_id: int, action: str) -> bool:
     """Called by Dashboard API when user releases a request (forwarded / dropped)."""
     if action not in ("forwarded", "dropped"):
         raise ValueError("Action must be 'forwarded' or 'dropped'")
@@ -133,12 +167,12 @@ def release_intercepted_request(request_id: int, action: str) -> bool:
         SET status = %s 
         WHERE request_id = %s;
     """
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, (action, request_id))
-            conn.commit()
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(query, (action, request_id))
+            await conn.commit()
 
-    with events_lock:
+    async with events_lock:
         event = intercept_events.get(request_id)
         if event:
             event.set()
@@ -147,42 +181,21 @@ def release_intercepted_request(request_id: int, action: str) -> bool:
     return False
 
 
-def get_modified_request_bytes(request_id: int) -> Optional[bytes]:
+async def get_modified_request_bytes(request_id: int) -> Optional[bytes]:
     """Retrieves modified raw_bytes from modified_requests table if present."""
     query = """
         SELECT raw_bytes 
         FROM modified_requests 
         WHERE request_id = %s;
     """
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, (request_id,))
-            row = cur.fetchone()
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(query, (request_id,))
+            row = await cur.fetchone()
             return row[0] if row else None
 
 
-def init_db():
-    """Connect to the database using the connection pool and execute the tables.sql script."""
-    BASE_DIR = Path(__file__).resolve().parent
-    schema_path = BASE_DIR / "schema" / "tables.sql"
-
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            with open(schema_path, "r", encoding="utf-8") as file:
-                make_table = file.read()
-
-            cur.execute(make_table)
-            conn.commit()
-            print("✅ tables.sql script executed successfully.")
-
-
-def open_pool():
-    """Opens the database connection pool."""
-    pool.open()
-    print("🔌 Database connection pool opened.")
-
-
-def save_raw_requests(packet: HTTPRequest, raw_bytes: bytes = b"") -> int:
+async def save_raw_requests(packet: HTTPRequest, raw_bytes: bytes = b"") -> int:
     """Save the parsed HTTP request into the raw_requests table."""
     query = """
         INSERT INTO raw_requests (method, host, port, path, headers, raw_bytes)
@@ -191,9 +204,9 @@ def save_raw_requests(packet: HTTPRequest, raw_bytes: bytes = b"") -> int:
     """
     headers_json = json.dumps(dict(packet.headers))
 
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
                 query,
                 (
                     packet.method,
@@ -204,42 +217,50 @@ def save_raw_requests(packet: HTTPRequest, raw_bytes: bytes = b"") -> int:
                     raw_bytes,
                 ),
             )
-            inserted_id = cur.fetchone()[0]
-            conn.commit()
-            return inserted_id
+            row = await cur.fetchone()
+            await conn.commit()
+            return row[0]
 
 
-def close_pool():
-    """Closes all connections in the pool safely."""
-    pool.close()
-    print("🔌 Database connection pool closed.")
+async def get_total_requests_count() -> int:
+    """Returns the total number of intercepted raw requests."""
+    query = "SELECT COUNT(*) FROM raw_requests;"
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(query)
+            row = await cur.fetchone()
+            return row[0]
+
+
+async def get_modified_requests_count() -> int:
+    """Returns the total number of modified requests."""
+    query = "SELECT COUNT(*) FROM modified_requests;"
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(query)
+            row = await cur.fetchone()
+            return row[0]
 
 
 # ---------------------------------------------------------
-# 🧪 TEST PROGRAM FOR THREAD BLOCKING & INTERCEPT LOGIC
+# 🧪 ASYNC TEST PROGRAM
 # ---------------------------------------------------------
-def simulated_client_thread(req_id: int):
-    """Simulates a client socket connection thread waiting for user action."""
-    print(
-        f"⏳ [Client Thread] Request #{req_id} paused. Waiting for dashboard"
-        " action..."
-    )
-    start_time = time.time()
+async def simulated_client_task(req_id: int):
+    """Simulates an async client handler task waiting for user action."""
+    print(f"⏳ [Client Task] Request #{req_id} paused. Waiting for dashboard action...")
+    start_time = asyncio.get_event_loop().time()
 
-    # Block current thread
-    final_action = wait_for_user_action(req_id, timeout=10.0)
+    # Wait for action asynchronously
+    final_action = await wait_for_user_action(req_id, timeout=10.0)
 
-    elapsed = time.time() - start_time
-    print(
-        f"🟢 [Client Thread] Request #{req_id} UNBLOCKED after {elapsed:.2f}s!"
-        f" Final Action: '{final_action}'"
-    )
+    elapsed = asyncio.get_event_loop().time() - start_time
+    print(f"🟢 [Client Task] Request #{req_id} UNBLOCKED after {elapsed:.2f}s! Final Action: '{final_action}'")
 
 
-if __name__ == "__main__":
+async def main():
     try:
-        open_pool()
-        init_db()
+        await open_pool()
+        await init_db()
 
         # 1. Create a sample HTTPRequest instance
         sample_raw = (
@@ -250,32 +271,33 @@ if __name__ == "__main__":
         req = HTTPRequest(sample_raw)
 
         # 2. Persist raw packet to DB
-        new_id = save_raw_requests(req, raw_bytes=sample_raw.encode("utf-8"))
+        new_id = await save_raw_requests(req, raw_bytes=sample_raw.encode("utf-8"))
         print(f"✅ Saved raw request with ID: {new_id}")
 
         # 3. Create a pending record in intercept_queue
-        queue_id = create_intercept_entry(new_id)
-        print(f"⏸️ Created queue record ID: {queue_id} for request #{new_id}")
+        queue_id = await create_intercept_entry(new_id)
+        print(f"⏸ Created queue record ID: {queue_id} for request #{new_id}")
 
-        # 4. Spawn simulated socket thread
-        client_t = threading.Thread(
-            target=simulated_client_thread, args=(new_id,)
-        )
-        client_t.start()
+        # 4. Run simulated client task in background
+        client_task = asyncio.create_task(simulated_client_task(new_id))
 
         # 5. Simulate 2-second user inspection delay in dashboard
-        print("👤 [Dashboard Simulation] User is inspecting the packet...")
-        time.sleep(2)
+        print(" [Dashboard Simulation] User is inspecting the packet...")
+        await asyncio.sleep(2)
 
         # 6. Simulate user clicking FORWARD button
         print("👆 [Dashboard Simulation] User clicked 'FORWARD'!")
-        released = release_intercepted_request(new_id, action="forwarded")
+        released = await release_intercepted_request(new_id, action="forwarded")
         print(f"✨ Release signal sent: {released}")
 
-        # Wait for client thread execution to complete
-        client_t.join()
+        # Wait for client task to complete execution
+        await client_task
 
     except Exception as e:
         print(f"❌ An error occurred: {e}")
     finally:
-        close_pool()
+        await close_pool()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
