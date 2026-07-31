@@ -1,10 +1,20 @@
+import asyncio
 import functools
-import socket
-import threading
+import logging
 import time
 from typing import Any, Callable
 
-from database import *
+# Import async database helper functions
+from database import (
+    close_pool,
+    create_intercept_entry,
+    get_modified_request_bytes,
+    init_db,
+    open_pool,
+    release_intercepted_request,
+    save_raw_requests,
+    wait_for_user_action,
+)
 from inspector_tools import HTTPRequest, JSONLogger, Security_Analyzer
 
 PORT = 8080
@@ -13,85 +23,82 @@ SERVER_IP = "0.0.0.0"
 RED = "\033[91m"
 RESET = "\033[0m"
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
 file_logger = JSONLogger("requests_log.json")
 security_analyze = Security_Analyzer()
 
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind((SERVER_IP, PORT))
-
-
-def auto_release_tester(
-    req_id: int, action: str = "forwarded", delay_seconds: float = 3.0
-):
+async def auto_release_tester(
+        req_id: int, action: str = "forwarded", delay_seconds: float = 3.0
+) -> None:
     """
-    Simulates user action on the dashboard after a specified delay.
-    Runs in a background thread within the same process memory space.
+    Simulates user action on the dashboard after a specified delay using asyncio.
     """
-
-    def _task():
-        time.sleep(delay_seconds)
-        print(
-            f"\n[TEST SIMULATOR] Simulating user action on Request #{req_id} ->"
-            f" Action: '{action}'"
-        )
-        released = release_intercepted_request(req_id, action)
-        print(
-            f"[TEST SIMULATOR] Signal delivered to event registry: {released}\n"
-        )
-
-    threading.Thread(target=_task, daemon=True).start()
+    await asyncio.sleep(delay_seconds)
+    print(
+        f"\n[TEST SIMULATOR] Simulating user action on Request #{req_id} ->"
+        f" Action: '{action}'"
+    )
+    released = await release_intercepted_request(req_id, action)
+    print(f"[TEST SIMULATOR] Signal delivered to event registry: {released}\n")
 
 
 def track_uptime(func: Callable[..., Any]) -> Callable[..., Any]:
     @functools.wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
-        addr = args[1] if len(args) > 1 else kwargs.get("addr", ("Unknown", 0))
-        client_id = args[2] if len(args) > 2 else kwargs.get("client_id", 0)
+    async def wrapper(*args: Any, **kwargs: Any) -> Any:
+        writer: asyncio.StreamWriter = args[1] if len(args) > 1 else kwargs.get("writer")
+        client_id: int = args[2] if len(args) > 2 else kwargs.get("client_id", 0)
+
+        addr = writer.get_extra_info("peername") if writer else ("Unknown", 0)
         start_time = time.time()
 
-        result = func(*args, **kwargs)
-
-        uptime = time.time() - start_time
-        print(
-            f"[UPTIME] Client {client_id} [Port: {addr[1]}] disconnected."
-            f" Active for: {uptime:.2f}s\n"
-        )
-        return result
+        try:
+            return await func(*args, **kwargs)
+        finally:
+            uptime = time.time() - start_time
+            print(
+                f"[UPTIME] Client {client_id} [Port: {addr[1]}] disconnected."
+                f" Active for: {uptime:.2f}s\n"
+            )
 
     return wrapper
 
 
 @track_uptime
-def handle_client(client_socket, addr, client_id):
-    print(
-        f"\n[NEW CONNECTION] Client {client_id} connected from port: {addr[1]}"
-    )
-    try:
-        client_socket.settimeout(3.0)
+async def handle_client(
+        reader: asyncio.StreamReader, writer: asyncio.StreamWriter, client_id: int
+) -> None:
+    addr = writer.get_extra_info("peername")
+    print(f"\n[NEW CONNECTION] Client {client_id} connected from port: {addr[1]}")
 
+    try:
         raw_bytes = b""
 
+        # Read HTTP headers asynchronously
         while b"\r\n\r\n" not in raw_bytes:
-            chunk = client_socket.recv(4096)
+            try:
+                # Read with a timeout of 3 seconds for header completion
+                chunk = await asyncio.wait_for(reader.read(4096), timeout=3.0)
+            except asyncio.TimeoutError:
+                break
+
             if not chunk:
                 break
             raw_bytes += chunk
 
             if len(raw_bytes) > 8192:
                 print(f"[!] Client {client_id} sent abnormally large headers.")
-                client_socket.sendall(
+                writer.write(
                     b"HTTP/1.1 431 Request Header Fields Too Large\r\n\r\nHeaders exceeded maximum allowed size."
                 )
+                await writer.drain()
                 return
 
         if not raw_bytes:
             return
 
         message = raw_bytes.decode(FORMAT, errors="replace")
-
         req = HTTPRequest(message)
 
         print("=" * 50)
@@ -114,57 +121,45 @@ def handle_client(client_socket, addr, client_id):
 
         if not security_result["is_secure"]:
             clean_patterns = ", ".join(security_result["matched_patterns"])
-
             print(f"{RED}[🚨 SECURITY ALERT] Malicious Request Detected!{RESET}")
-            print(
-                f"{RED}    ▶ Attack Type:     "
-                f" {security_result['attack_type']}{RESET}"
-            )
-            print(
-                f"{RED}    ▶ Matched Patterns: {clean_patterns}{RESET}"
-            )
+            print(f"{RED}    ▶ Attack Type:      {security_result['attack_type']}{RESET}")
+            print(f"{RED}    ▶ Matched Patterns: {clean_patterns}{RESET}")
             print(f"{RED}" + "=" * 50 + f"{RESET}")
 
-        # 1. Save raw request to database
-        request_id = save_raw_requests(req, raw_bytes=raw_bytes)
+        # 1. Save raw request to database asynchronously
+        request_id = await save_raw_requests(req, raw_bytes=raw_bytes)
         print(f"💾 [DB] Saved raw request with ID: {request_id}")
 
-        # 2. Insert entry into intercept queue
-        queue_id = create_intercept_entry(request_id)
+        # 2. Insert entry into intercept queue asynchronously
+        queue_id = await create_intercept_entry(request_id)
         print(
             f"⏸️ [INTERCEPT] Request #{request_id} queued (Queue ID: {queue_id})."
-            " Holding thread..."
+            " Holding task..."
         )
 
-        # 🧪 DISABLED FOR MANUAL TESTING:
-        # auto_release_tester(request_id, action="forwarded", delay_seconds=15)
+        # 🧪 Uncomment if you want automatic test release:
+        # asyncio.create_task(auto_release_tester(request_id, action="forwarded", delay_seconds=15))
 
-        # 3. Block client thread until released by user (or timeout after 5 mins)
-        action = wait_for_user_action(request_id, timeout=300.0)
+        # 3. Non-blocking wait for user action (up to 5 mins)
+        action = await wait_for_user_action(request_id, timeout=300.0)
         print(
-            f"🟢 [INTERCEPT] Thread unblocked for Request #{request_id}. Action:"
-            f" '{action}'"
+            f"🟢 [INTERCEPT] Task unblocked for Request #{request_id}. Action: '{action}'"
         )
 
-        # 4. Handle user action: close socket if request was dropped
+        # 4. Handle dropped request
         if action == "dropped":
             print(
                 f"🚫 [DROPPED] Request #{request_id} was dropped by user."
                 " Closing socket."
             )
-            client_socket.sendall(
+            writer.write(
                 b"HTTP/1.1 403 Forbidden\r\n\r\nRequest dropped by Interceptor."
             )
+            await writer.drain()
             return
 
-        # 5. Fetch modified bytes if available in database
-        modified_bytes = get_modified_request_bytes(request_id)
-        payload_to_send = (
-            modified_bytes if modified_bytes is not None else raw_bytes
-        )
-
-        # 5. Fetch modified bytes if available in database
-        modified_bytes = get_modified_request_bytes(request_id)
+        # 5. Fetch modified bytes if available in database asynchronously
+        modified_bytes = await get_modified_request_bytes(request_id)
 
         if modified_bytes:
             payload_to_send = modified_bytes
@@ -174,61 +169,82 @@ def handle_client(client_socket, addr, client_id):
             payload_to_send = raw_bytes
             target = (req.target_host, req.target_port)
 
-        if target == (SERVER_IP, PORT) or target == ("127.0.0.1", PORT):
+        # Prevent infinite loop back to our own proxy
+        if target in [(SERVER_IP, PORT), ("127.0.0.1", PORT), ("localhost", PORT)]:
             print(f"[!] Blocked an infinite loop request to ourselves: {target}")
-            client_socket.sendall(
+            writer.write(
                 b"HTTP/1.1 400 Bad Request\r\n\r\nCannot proxy to myself."
             )
+            await writer.drain()
             return
 
-        # 6. Forward final payload (original or modified) to target server
-        mitm_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        mitm_socket.connect(target)
-        mitm_socket.sendall(payload_to_send)
-
-        mitm_socket.settimeout(2.0)
-
+        # 6. Forward payload asynchronously to Target Server
         try:
-            while True:
-                response_chunk = mitm_socket.recv(4096)
+            target_reader, target_writer = await asyncio.open_connection(
+                target[0], target[1]
+            )
+            target_writer.write(payload_to_send)
+            await target_writer.drain()
 
-                if not response_chunk:
+            # Proxy response back to client asynchronously
+            while True:
+                try:
+                    response_chunk = await asyncio.wait_for(
+                        target_reader.read(4096), timeout=2.0
+                    )
+                    if not response_chunk:
+                        break
+                    writer.write(response_chunk)
+                    await writer.drain()
+                except asyncio.TimeoutError:
                     break
 
-                client_socket.sendall(response_chunk)
+            target_writer.close()
+            await target_writer.wait_closed()
 
-        except socket.timeout:
-            pass
-        finally:
-            mitm_socket.close()
+        except Exception as net_err:
+            print(f"[!] Target connection error ({target}): {net_err}")
+            writer.write(
+                b"HTTP/1.1 502 Bad Gateway\r\n\r\nFailed to connect to target server."
+            )
+            await writer.drain()
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error handling client {client_id}: {e}")
     finally:
-        client_socket.close()
+        writer.close()
+        await writer.wait_closed()
 
 
-def start():
-    # Open connection pool and initialize database schema
-    open_pool()
-    init_db()
+async def main() -> None:
+    # 1. Open connection pool and initialize database schema asynchronously
+    await open_pool()
+    await init_db()
 
-    server.listen()
+    client_id_counter = 0
+
+    # Callback factory to pass client_id to handle_client
+    async def client_cb(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        nonlocal client_id_counter
+        client_id_counter += 1
+        await handle_client(reader, writer, client_id_counter)
+
+    # 2. Start Asyncio Socket Server
+    server = await asyncio.start_server(client_cb, SERVER_IP, PORT)
     print(f"🚀 Server is listening! Open http://127.0.0.1:{PORT}")
-    client_id = 0
-    try:
-        while True:
-            client, addr = server.accept()
-            client_id += 1
-            thread = threading.Thread(
-                target=handle_client, args=(client, addr, client_id)
-            )
-            thread.start()
-    except KeyboardInterrupt:
-        print("\n🛑 Shutting down server...")
-    finally:
-        close_pool()  # Ensure database pool is safely closed on server shutdown
+
+    async with server:
+        try:
+            await server.serve_forever()
+        except asyncio.CancelledError:
+            pass
+        finally:
+            print("\n🛑 Shutting down server...")
+            await close_pool()
 
 
 if __name__ == "__main__":
-    start()
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\n👋 Server stopped gracefully.")

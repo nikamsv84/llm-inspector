@@ -1,14 +1,14 @@
+import asyncio
 import json
 import sys
-import time
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
 
 from database.db_manager import (
-    init_db,
     get_pending_intercepts,
+    init_db,
     open_pool,
     release_intercepted_request,
     save_modified_request,
@@ -37,9 +37,14 @@ def rebuild_raw_http(method: str, path: str, headers: dict, body: str = "") -> b
     return request_head + body_bytes
 
 
-def start_cli_dashboard():
-    open_pool()
-    init_db()
+async def async_input(prompt: str = "") -> str:
+    """Non-blocking wrapper for standard input using asyncio thread pool."""
+    return await asyncio.to_thread(input, prompt)
+
+
+async def start_cli_dashboard() -> None:
+    await open_pool()
+    await init_db()
     print("\n" + "=" * 60)
     print("🚀 [CLI INTERCEPTOR DASHBOARD STARTED]")
     print("Waiting for pending requests... (Press Ctrl+C to exit)")
@@ -47,7 +52,7 @@ def start_cli_dashboard():
 
     try:
         while True:
-            pending_list = get_pending_intercepts()
+            pending_list = await get_pending_intercepts()
 
             for item in pending_list:
                 queue_id = item.get("queue_id")
@@ -76,51 +81,50 @@ def start_cli_dashboard():
 
                 while True:
                     try:
-                        action = (
-                            input("👉 Action -> [f]orward / [d]rop / [e]dit: ")
-                            .strip()
-                            .lower()
-                        )
+                        raw_action = await async_input("👉 Action -> [f]orward / [d]rop / [e]dit: ")
+                        action = raw_action.strip().lower()
                     except UnicodeDecodeError:
                         print("⚠️ Invalid encoding character detected. Retrying...")
                         continue
 
                     if action == "f":
-                        release_intercepted_request(req_id, action="forwarded")
+                        await release_intercepted_request(req_id, action="forwarded")
                         print(f"✅ Request #{req_id} FORWARDED (Unmodified).")
                         break
 
                     elif action == "d":
-                        release_intercepted_request(req_id, action="dropped")
+                        await release_intercepted_request(req_id, action="dropped")
                         print(f"❌ Request #{req_id} DROPPED.")
                         break
 
                     elif action == "e":
                         print("\n--- ✏️ EDIT REQUEST MODE ---")
-                        new_path = input(f"New Path (Press Enter to keep '{path}'): ").strip() or path
+                        new_path_input = await async_input(f"New Path (Press Enter to keep '{path}'): ")
+                        new_path = new_path_input.strip() or path
 
                         current_host = headers.get("Host", headers.get("host", f"{host}:{port}"))
-                        new_host = input(
-                            f"New Host Header (Press Enter to keep '{current_host}'): ").strip() or current_host
+                        new_host_input = await async_input(
+                            f"New Host Header (Press Enter to keep '{current_host}'): "
+                        )
+                        new_host = new_host_input.strip() or current_host
                         headers["Host"] = new_host
 
-                        new_body = input("New Body Data (Press Enter to keep empty/original): ").strip()
+                        new_body_input = await async_input("New Body Data (Press Enter to keep empty/original): ")
+                        new_body = new_body_input.strip()
 
                         new_raw_bytes = rebuild_raw_http(method, new_path, headers, body=new_body)
 
-                        save_modified_request(req_id, method, new_path, headers, new_raw_bytes)
-                        release_intercepted_request(req_id, action="forwarded")
-                        print(
-                            f"✏️ Request #{req_id} MODIFIED & FORWARDED!"
-                        )
+                        await save_modified_request(req_id, method, new_path, headers, new_raw_bytes)
+                        await release_intercepted_request(req_id, action="forwarded")
+                        print(f"✏️ Request #{req_id} MODIFIED & FORWARDED!")
                         break
 
                     else:
                         print("⚠️ Invalid choice! Please enter 'f', 'd', or 'e'.")
 
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
 
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, asyncio.CancelledError):
         print("\n\n🛑 Stopping CLI Dashboard... Goodbye!")
 
 
@@ -130,4 +134,7 @@ if __name__ == "__main__":
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-    start_cli_dashboard()
+    try:
+        asyncio.run(start_cli_dashboard())
+    except KeyboardInterrupt:
+        pass
