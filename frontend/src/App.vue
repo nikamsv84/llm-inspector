@@ -14,17 +14,13 @@ function onPacketSelected(packet) {
 <template>
   <div class="dashboard-container">
 
-    <!-- ۱. هدر اصلی -->
     <HeaderBar />
 
-    <!-- ۲. بدنه دو ستونه -->
     <main class="main-zone">
-      <!-- ستون چپ: جدول پکت‌ها -->
       <section class="table-zone">
         <PacketTable @select-packet="onPacketSelected" />
       </section>
 
-      <!-- ستون راست: بازرس پکت (Inspector) -->
       <aside class="inspector-zone">
         <PacketInspector :packet="currentSelectedPacket" />
       </aside>

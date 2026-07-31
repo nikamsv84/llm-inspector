@@ -95,7 +95,7 @@ if __name__ == "__main__":
     req1 = HTTPRequest(sample_request_with_port)
     print("[Test 1 - Custom Port]")
     print(f"Target Host: {req1.target_host}")
-    print(f"Target Port: {req1.target_port} (Type: {type(req1.target_port).__name__})")  # باید چاپ کند: 8080 (int)
+    print(f"Target Port: {req1.target_port} (Type: {type(req1.target_port).__name__})")
     print("-" * 30)
 
     sample_request_no_port = (

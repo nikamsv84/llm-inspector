@@ -7,7 +7,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        // رنگ‌های اختصاصی تم بنفش تیره و یاسی
         dark: {
           bg: '#0f0c1b',
           card: '#18132a',

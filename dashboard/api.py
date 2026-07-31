@@ -22,7 +22,7 @@ class InterceptItem(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 class InterceptActionRequest(BaseModel):
-    action: str  # 'forwarded' یا 'dropped'
+    action: str
     modified_method: Optional[str] = None
     modified_path: Optional[str] = None
 

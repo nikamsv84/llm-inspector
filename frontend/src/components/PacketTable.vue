@@ -1,13 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 
-// تعریف رویداد برای اطلاع‌رسانی به App.vue در صورت انتخاب یک پکت
 const emit = defineEmits(['select-packet'])
 
-// شناسه پکت انتخاب‌شده فعلی
 const selectedId = ref(null)
 
-// داده‌های آزمایشی (Mock Data) برای نمایش در جدول
 const packets = ref([
   { id: 101, time: '14:02:11', method: 'GET', path: '/api/v1/auth/me', status: 200, risk: 'Low' },
   { id: 102, time: '14:02:15', method: 'POST', path: '/api/v1/login', status: 200, risk: 'Medium' },
@@ -16,7 +13,6 @@ const packets = ref([
   { id: 105, time: '14:02:29', method: 'DELETE', path: '/api/v1/session/99', status: 500, risk: 'High' },
 ])
 
-// تابع کلیک روی ردیف جدول
 function handleSelect(packet) {
   selectedId.value = packet.id
   emit('select-packet', packet)

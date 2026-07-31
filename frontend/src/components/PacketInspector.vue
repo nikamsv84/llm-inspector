@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 
-// دریافت پکتی که از App.vue ارسال میشه
 const props = defineProps({
   packet: {
     type: Object,
@@ -9,7 +8,6 @@ const props = defineProps({
   }
 })
 
-// وضعیت تب فعال (General | Payload | AI)
 const activeTab = ref('general')
 </script>
 
@@ -20,15 +18,12 @@ const activeTab = ref('general')
       <span v-if="packet" class="pkt-id-tag">ID: #{{ packet.id }}</span>
     </div>
 
-    <!-- حالت اول: هیچ پکتی انتخاب نشده -->
     <div v-if="!packet" class="empty-state">
       <span class="empty-icon">👈</span>
       <p>Select a packet from the live stream to inspect details.</p>
     </div>
 
-    <!-- حالت دوم: پکت انتخاب شده و جزئیات نمایش داده میشه -->
     <div v-else class="inspector-content">
-      <!-- تب‌های بالا -->
       <div class="tabs">
         <button
           :class="{ active: activeTab === 'general' }"
@@ -51,7 +46,6 @@ const activeTab = ref('general')
         </button>
       </div>
 
-      <!-- محتوای تب General -->
       <div v-if="activeTab === 'general'" class="tab-pane">
         <div class="info-row">
           <span class="label">Request Path:</span>
@@ -75,7 +69,6 @@ const activeTab = ref('general')
         </div>
       </div>
 
-      <!-- محتوای تب Headers & Payload -->
       <div v-if="activeTab === 'payload'" class="tab-pane">
         <div class="code-box">
           <div class="box-title">HTTP Headers</div>
@@ -94,7 +87,6 @@ Authorization: Bearer eyJhbGciOi...</code></pre>
         </div>
       </div>
 
-      <!-- محتوای تب AI Defense Analysis -->
       <div v-if="activeTab === 'ai'" class="tab-pane">
         <div class="ai-card" :class="{ 'warning-card': packet.risk === 'High' }">
           <div class="ai-card-header">

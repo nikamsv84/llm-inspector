@@ -7,7 +7,6 @@ import uvicorn
 
 app = FastAPI()
 
-# وضعیت اولیه اینترسپت در پایتون
 is_intercept_on = False
 
 MOCK_PACKETS = [
@@ -17,7 +16,6 @@ MOCK_PACKETS = [
 ]
 
 
-# ۱. این API مسئول تغییر وضعیت در پایتون و فرستادن پاسخ به جاوااسکریپت است
 @app.post("/api/intercept/toggle")
 def toggle_intercept():
     global is_intercept_on
@@ -29,7 +27,6 @@ def toggle_intercept():
 def get_dashboard():
     global is_intercept_on
 
-    # تعیین وضعیت اولیه برای لود اول صفحه
     status_text = "ON" if is_intercept_on else "OFF"
     status_color = "text-red-500" if is_intercept_on else "text-amber-400"
 
@@ -113,14 +110,12 @@ def get_dashboard():
 
         <script>
         function toggleIntercept() {
-            // فرستادن درخواست به بک‌آند فاست‌اِی‌پ‌آی
             fetch('/api/intercept/toggle', { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     const statusTarget = document.getElementById('intercept-status');
                     statusTarget.innerText = data.status;
 
-                    // تغییر رنگ داینامیک متناسب با وضعیت
                     if (data.status === 'ON') {
                         statusTarget.className = 'text-2xl font-bold mt-1 font-mono text-red-500';
                     } else {

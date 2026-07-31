@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 
-// متغیرهای وضعیت هدر
 const isSystemActive = ref(true)
 const packetCount = ref(142)
 
@@ -23,21 +22,17 @@ function toggleSystem() {
       </div>
     </div>
 
-    <!-- بخش کنترل و وضعیت سیستم -->
     <div class="controls">
-      <!-- آمار پکت‌های پردازش‌شده -->
       <div class="stat-badge">
         <span class="stat-label">Queue:</span>
         <span class="stat-value">{{ packetCount }} pkts</span>
       </div>
 
-      <!-- وضعیت زنده (Live Indicator) -->
       <div class="status-badge" :class="{ 'is-active': isSystemActive }">
         <span class="pulse-dot"></span>
         <span class="status-text">{{ isSystemActive ? 'INTERCEPTING' : 'PAUSED' }}</span>
       </div>
 
-      <!-- دکمه سوییچ فعال/غیرفعال -->
       <button @click="toggleSystem" class="toggle-btn" :class="{ 'btn-active': isSystemActive }">
         {{ isSystemActive ? 'Pause Capture' : 'Resume Capture' }}
       </button>
