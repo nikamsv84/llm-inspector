@@ -1,12 +1,54 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const isSystemActive = ref(true)
-const packetCount = ref(142)
+const packetCount = ref(0)
+let pollInterval = null
 
-function toggleSystem() {
-  isSystemActive.value = !isSystemActive.value
+// 1. Fetch initial status and queue count from FastAPI
+async function fetchCurrentStatus() {
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/system/status', {
+  cache: 'no-store'
+})
+    const data = await response.json()
+
+    // data.status is the `is_paused` value from get_dashboard_status()
+    // If status (is_paused) is true -> system is paused (isSystemActive = false)
+    isSystemActive.value = !data.status
+
+    // Update queue packet count with real database/memory count
+    packetCount.value = data.pending_intercepts
+  } catch (error) {
+    console.error('Failed to fetch initial status:', error)
+  }
 }
+
+// 2. Toggle status when the user clicks the button
+async function toggleSystem() {
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/system/toggle-pause', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const data = await response.json()
+
+    // Assuming toggle-pause returns { "is_paused": boolean } or similar boolean result
+    // If it returns an object like { "is_paused": true }, use data.is_paused or data directly
+    const pausedState = typeof data === 'object' && data !== null ? (data.is_paused ?? data.status) : data
+    isSystemActive.value = !pausedState
+
+  } catch (error) {
+    console.error('Failed to send toggle status request:', error)
+  }
+}
+
+onMounted(() => {
+  fetchCurrentStatus()
+})
 </script>
 
 <template>
@@ -17,8 +59,8 @@ function toggleSystem() {
         <span class="logo-placeholder"></span>
       </div>
       <div class="brand-titles">
-        <h1 class="main-title">Ai<span class="highlight">powered</span></h1>
-        <span class="sub-title">PACKET INSPECTOR</span>
+        <h1 class="main-title">LLM<span class="highlight">inspector</span></h1>
+        <span class="sub-title">PACKET INSPECTOR FOCUSED ON LLM APIS</span>
       </div>
     </div>
 
@@ -74,8 +116,8 @@ function toggleSystem() {
 .logo-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
-  mix-blend-mode: screen; 
+  object-fit: cover;
+  mix-blend-mode: screen;
 }
 
 .logo-placeholder {
