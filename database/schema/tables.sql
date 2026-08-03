@@ -28,3 +28,14 @@ CREATE TABLE IF NOT EXISTS modified_requests (
     CONSTRAINT fk_raw_request_modified FOREIGN KEY (request_id)
         REFERENCES raw_requests(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS dashboard_status (
+    id INT PRIMARY KEY DEFAULT 1,
+    is_paused BOOLEAN NOT NULL DEFAULT FALSE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT single_row_check CHECK (id = 1)
+);
+
+INSERT INTO dashboard_status (id, is_paused)
+VALUES (1, false)
+ON CONFLICT (id) DO NOTHING;

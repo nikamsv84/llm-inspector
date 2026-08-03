@@ -1,23 +1,26 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const isSystemActive = ref(true)
 const packetCount = ref(0)
-let pollInterval = null
 
-// 1. Fetch initial status and queue count from FastAPI
+let socket = null
+let reconnectTimeout = null
+const RECONNECT_DELAY = 2000 // ms
+
+// 1. Fetch initial status and queue count from FastAPI (one-time snapshot on load)
 async function fetchCurrentStatus() {
   try {
     const response = await fetch('http://localhost:8000/api/v1/system/status', {
-  cache: 'no-store'
-})
+      cache: 'no-store'
+    })
     const data = await response.json()
 
     // data.status is the `is_paused` value from get_dashboard_status()
     // If status (is_paused) is true -> system is paused (isSystemActive = false)
     isSystemActive.value = !data.status
 
-    // Update queue packet count with real database/memory count
+    // Initial queue count snapshot; live updates take over from here via WebSocket
     packetCount.value = data.pending_intercepts
   } catch (error) {
     console.error('Failed to fetch initial status:', error)
@@ -46,8 +49,59 @@ async function toggleSystem() {
   }
 }
 
+// 3. Live packet count via WebSocket (backend broadcasts one message per new packet
+//    from notify_new_packet() in dashboard/api.py -> ConnectionManager.broadcast)
+function connectWebSocket() {
+  socket = new WebSocket('ws://localhost:8000/ws/packets')
+
+  socket.onopen = () => {
+    console.log('[ws] connected to /ws/packets')
+    if (reconnectTimeout) {
+      clearTimeout(reconnectTimeout)
+      reconnectTimeout = null
+    }
+  }
+
+  socket.onmessage = (event) => {
+    try {
+      const payload = JSON.parse(event.data)
+
+      // If the backend ever sends an explicit count/queue size, prefer that;
+      // otherwise treat each message as "one new packet arrived".
+      if (payload && typeof payload.pending_intercepts === 'number') {
+        packetCount.value = payload.pending_intercepts
+      } else if (payload && typeof payload.count === 'number') {
+        packetCount.value = payload.count
+      } else {
+        packetCount.value += 1
+      }
+    } catch (error) {
+      console.error('[ws] failed to parse message:', error)
+    }
+  }
+
+  socket.onerror = (error) => {
+    console.error('[ws] error:', error)
+  }
+
+  socket.onclose = () => {
+    console.warn('[ws] connection closed, retrying in', RECONNECT_DELAY, 'ms')
+    socket = null
+    reconnectTimeout = setTimeout(connectWebSocket, RECONNECT_DELAY)
+  }
+}
+
 onMounted(() => {
   fetchCurrentStatus()
+  connectWebSocket()
+})
+
+onUnmounted(() => {
+  if (reconnectTimeout) clearTimeout(reconnectTimeout)
+  if (socket) {
+    socket.onclose = null // don't trigger reconnect on manual unmount
+    socket.close()
+  }
 })
 </script>
 

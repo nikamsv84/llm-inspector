@@ -3,17 +3,21 @@ import functools
 import logging
 import time
 from typing import Any, Callable
+import urllib.request
+from dashboard.api import notify_new_packet
 
 # Import async database helper functions
-from database import (
+from database.db_manager import (
     close_pool,
     create_intercept_entry,
+    get_dashboard_status, 
     get_modified_request_bytes,
     init_db,
     open_pool,
     release_intercepted_request,
     save_raw_requests,
     wait_for_user_action,
+    get_pending_intercepts
 )
 from inspector_tools import HTTPRequest, JSONLogger, Security_Analyzer
 
@@ -126,40 +130,55 @@ async def handle_client(
             print(f"{RED}    ▶ Matched Patterns: {clean_patterns}{RESET}")
             print(f"{RED}" + "=" * 50 + f"{RESET}")
 
-        # 1. Save raw request to database asynchronously
-        request_id = await save_raw_requests(req, raw_bytes=raw_bytes)
-        print(f"💾 [DB] Saved raw request with ID: {request_id}")
+        # Check Dashboard Pause Status (Bypass Logic)
+        is_paused = await get_dashboard_status()
+        request_id = None
 
-        # 2. Insert entry into intercept queue asynchronously
-        queue_id = await create_intercept_entry(request_id)
-        print(
-            f"⏸️ [INTERCEPT] Request #{request_id} queued (Queue ID: {queue_id})."
-            " Holding task..."
-        )
+        if is_paused:
+            print(f"⚡ [BYPASS] Proxy is PAUSED. Bypassing intercept queue for Client {client_id}.")
+        else:
+            # 1. Save raw request to database asynchronously
+            request_id = await save_raw_requests(req, raw_bytes=raw_bytes)
+            print(f"💾 [DB] Saved raw request with ID: {request_id}")
 
-        # 🧪 Uncomment if you want automatic test release:
-        # asyncio.create_task(auto_release_tester(request_id, action="forwarded", delay_seconds=15))
-
-        # 3. Non-blocking wait for user action (up to 5 mins)
-        action = await wait_for_user_action(request_id, timeout=300.0)
-        print(
-            f"🟢 [INTERCEPT] Task unblocked for Request #{request_id}. Action: '{action}'"
-        )
-
-        # 4. Handle dropped request
-        if action == "dropped":
+            # 2. Insert entry into intercept queue asynchronously
+            queue_id = await create_intercept_entry(request_id)
             print(
-                f"🚫 [DROPPED] Request #{request_id} was dropped by user."
-                " Closing socket."
+                f"⏸️ [INTERCEPT] Request #{request_id} queued (Queue ID: {queue_id})."
+                " Holding task..."
             )
-            writer.write(
-                b"HTTP/1.1 403 Forbidden\r\n\r\nRequest dropped by Interceptor."
-            )
-            await writer.drain()
-            return
+            try:
+                def send_notify():
+                    url = "http://dashboard_api:8000/api/v1/internal/notify-packet"
+                    req_api = urllib.request.Request(url, data=b"", method="POST")
+                    with urllib.request.urlopen(req_api, timeout=2.0) as resp:
+                        pass
 
-        # 5. Fetch modified bytes if available in database asynchronously
-        modified_bytes = await get_modified_request_bytes(request_id)
+                await asyncio.to_thread(send_notify)
+            except Exception as notify_err:
+                print(f"[!] Failed to notify dashboard_api: {notify_err}")
+
+            # 3. Non-blocking wait for user action (up to 5 mins)
+            action = await wait_for_user_action(request_id, timeout=300.0)
+            print(
+                f"🟢 [INTERCEPT] Task unblocked for Request #{request_id}. Action: '{action}'"
+            )
+
+            # 4. Handle dropped request
+            if action == "dropped":
+                print(
+                    f"🚫 [DROPPED] Request #{request_id} was dropped by user."
+                    " Closing socket."
+                )
+                writer.write(
+                    b"HTTP/1.1 403 Forbidden\r\n\r\nRequest dropped by Interceptor."
+                )
+                await writer.drain()
+                return
+
+        modified_bytes = None
+        if request_id is not None:
+            modified_bytes = await get_modified_request_bytes(request_id)
 
         if modified_bytes:
             payload_to_send = modified_bytes
