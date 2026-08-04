@@ -1,22 +1,58 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const emit = defineEmits(['select-packet'])
-
 const selectedId = ref(null)
+const packets = ref([])
+let socket = null
+let reconnectTimeout = null
+const RECONNECT_DELAY = 3000
+function connectWebSocket() {
+  socket = new WebSocket('ws://localhost:8000/ws/packets')
 
-const packets = ref([
-  { id: 101, time: '14:02:11', method: 'GET', path: '/api/v1/auth/me', status: 200, risk: 'Low' },
-  { id: 102, time: '14:02:15', method: 'POST', path: '/api/v1/login', status: 200, risk: 'Medium' },
-  { id: 103, time: '14:02:18', method: 'POST', path: '/api/v1/chat/completions', status: 403, risk: 'High' },
-  { id: 104, time: '14:02:22', method: 'GET', path: '/api/v1/packets/stream', status: 200, risk: 'Low' },
-  { id: 105, time: '14:02:29', method: 'DELETE', path: '/api/v1/session/99', status: 500, risk: 'High' },
-])
+  socket.onopen = () => {
+    console.log('[ws] PacketTable connected')
+    if (reconnectTimeout) {
+      clearTimeout(reconnectTimeout)
+      reconnectTimeout = null
+    }
+  }
+
+  socket.onmessage = (event) => {
+    try {
+      const payload = JSON.parse(event.data)
+      if (payload.type === 'new_packet') {
+        packets.value.unshift(payload.packet)
+      }
+    } catch (error) {
+      console.error('[ws] failed to parse message:', error)
+    }
+  }
+
+  socket.onerror = (error) => {
+    console.error('[ws] error:', error)
+  }
+
+  socket.onclose = () => {
+    console.warn('[ws] connection closed, retrying in', RECONNECT_DELAY, 'ms')
+    socket = null
+    reconnectTimeout = setTimeout(connectWebSocket, RECONNECT_DELAY)
+  }
+}
 
 function handleSelect(packet) {
   selectedId.value = packet.id
   emit('select-packet', packet)
 }
+
+onMounted(() => {
+  connectWebSocket()
+})
+
+onUnmounted(() => {
+  if (reconnectTimeout) clearTimeout(reconnectTimeout)
+  if (socket) socket.close()
+})
 </script>
 
 <template>
