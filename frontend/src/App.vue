@@ -3,8 +3,13 @@ import { ref } from 'vue'
 import HeaderBar from './components/HeaderBar.vue'
 import PacketTable from './components/PacketTable.vue'
 import PacketInspector from './components/PacketInspector.vue'
+import BottomConsole from './components/BottomConsole.vue'
+import AIAttackerModal from './components/AIAttackerModal.vue'
+
 
 const currentSelectedPacket = ref(null)
+const showAIModal = ref(false)
+
 
 function onPacketSelected(packet) {
   currentSelectedPacket.value = packet
@@ -17,14 +22,24 @@ function onPacketSelected(packet) {
     <HeaderBar />
 
     <main class="main-zone">
-      <section class="table-zone">
-        <PacketTable @select-packet="onPacketSelected" />
-      </section>
+      <div class="left-column">
+        <section class="table-zone">
+          <PacketTable @select-packet="onPacketSelected" />
+        </section>
+
+        <section class="console-zone">
+          <BottomConsole />
+        </section>
+      </div>
 
       <aside class="inspector-zone">
-        <PacketInspector :packet="currentSelectedPacket" />
+        <PacketInspector
+  :packet="currentSelectedPacket"
+  @open-ai-modal="showAIModal = true"
+/>
       </aside>
     </main>
+    <AIAttackerModal v-if="showAIModal" @close="showAIModal = false"/>
 
   </div>
 </template>
@@ -47,16 +62,36 @@ function onPacketSelected(packet) {
   flex: 1;
   gap: 16px;
   overflow: hidden;
+  min-height: 0;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  gap: 16px;
+  min-height: 0;
 }
 
 .table-zone {
-  flex: 2;
+  flex: 3;
   background: #15102a;
   border: 1px solid #2e2348;
   border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.console-zone {
+  flex: 4;
+  background: #15102a;
+  border: 1px solid #2e2348;
+  border-radius: 8px;
+  padding: 16px;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .inspector-zone {
@@ -67,5 +102,6 @@ function onPacketSelected(packet) {
   padding: 16px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 </style>

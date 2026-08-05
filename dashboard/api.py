@@ -12,6 +12,15 @@ from database.db_manager import (
     toggle_status
 )
 
+class PacketNotifyPayload(BaseModel):
+    id: int
+    time: str
+    method: str
+    path: str
+    status: int | str
+    risk: str
+
+
 #websocket management->
 from contextlib import asynccontextmanager
 
@@ -33,7 +42,8 @@ class ConnectionManager:
                 await connection.send_json(message)
             except Exception:
                 pass
-manager = ConnectionManager()
+status_manager = ConnectionManager()
+packet_manager = ConnectionManager()
 
 #pydentic schemas->
 class InterceptItem(BaseModel):
@@ -71,17 +81,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 #websocket endpoint->
-@app.websocket("/ws/packets")
+@app.websocket("/ws/status")
 async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
+    await status_manager.connect(websocket)
     try:
         while True:
             await websocket.receive_text()
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        status_manager.disconnect(websocket)
+
+@app.websocket("/ws/packets")
+async def packets_ws(websocket: WebSocket):
+    await packet_manager.connect(websocket)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        packet_manager.disconnect(websocket)
 
 async def notify_new_packet(packet_data: dict):
-    await manager.broadcast(packet_data)
+    await packet_manager.broadcast(packet_data)
+
 #headerBar endpoints:
 @app.get("/api/v1/system/status")
 async def system_status():
@@ -101,11 +121,15 @@ async def toggle_system_pause():
 
 
 @app.post("/api/v1/internal/notify-packet")
-async def internal_notify_packet():
+async def internal_notify_packet(packet: PacketNotifyPayload):
     pending_intercepts = await get_pending_intercepts()
     count = len(pending_intercepts)
+    await packet_manager.broadcast({
+        "type": "new_packet",
+        "packet": packet.model_dump()
+    })
 
-    await manager.broadcast({
+    await status_manager.broadcast({
         "pending_intercepts": count
     })
     return {"status": "ok", "pending_intercepts": count}

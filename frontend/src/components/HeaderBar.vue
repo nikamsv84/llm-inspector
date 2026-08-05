@@ -132,6 +132,9 @@ onUnmounted(() => {
       <button @click="toggleSystem" class="toggle-btn" :class="{ 'btn-active': isSystemActive }">
         {{ isSystemActive ? 'Pause Capture' : 'Resume Capture' }}
       </button>
+      <button class="gen-report-btn">
+      Generate Report
+      </button>
     </div>
   </header>
 </template>
@@ -279,5 +282,33 @@ onUnmounted(() => {
 
 .toggle-btn.btn-active {
   border-color: #34d399;
+}
+
+@keyframes report-pulse {
+  0%, 100% {
+    border-color: #6b21a8;
+    box-shadow: 0 0 4px rgba(147, 51, 234, 0.25);
+  }
+  50% {
+    border-color: #a855f7;
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+  }
+}
+
+.gen-report-btn {
+  background: rgba(147, 51, 234, 0.15);
+  color: #c4b5fd;
+  border: 1px solid #6b21a8;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  animation: report-pulse 2.5s ease-in-out infinite;
+}
+
+.gen-report-btn:hover {
+  animation-play-state: paused;
+  opacity: 0.85;
 }
 </style>

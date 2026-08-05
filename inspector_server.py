@@ -4,6 +4,7 @@ import logging
 import time
 from typing import Any, Callable
 import urllib.request
+import json
 from dashboard.api import notify_new_packet
 
 # Import async database helper functions
@@ -130,6 +131,7 @@ async def handle_client(
             print(f"{RED}    ▶ Matched Patterns: {clean_patterns}{RESET}")
             print(f"{RED}" + "=" * 50 + f"{RESET}")
 
+
         # Check Dashboard Pause Status (Bypass Logic)
         is_paused = await get_dashboard_status()
         request_id = None
@@ -148,9 +150,27 @@ async def handle_client(
                 " Holding task..."
             )
             try:
+                risk_level = "High" if not security_result["is_secure"] else "Low"
+
+                notify_payload = {
+                    "id": request_id,
+                    "time": time.strftime("%H:%M:%S"),
+                    "method": req.method,
+                    "path": req.path,
+                    "http_version": req.http_version,
+                    "query_params": req.query_params,
+                    "target_host": req.target_host,
+                    "target_port": req.target_port,
+                    "status": 200,
+                    "risk": risk_level,
+                }
+
                 def send_notify():
                     url = "http://dashboard_api:8000/api/v1/internal/notify-packet"
-                    req_api = urllib.request.Request(url, data=b"", method="POST")
+                    body = json.dumps(notify_payload).encode("utf-8")
+                    req_api = urllib.request.Request(
+                        url, data=body, method="POST", headers={"Content-Type": "application/json"}
+                    )
                     with urllib.request.urlopen(req_api, timeout=2.0) as resp:
                         pass
 
