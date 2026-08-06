@@ -58,6 +58,40 @@ async def init_db():
             await conn.commit()
             print("✅ tables.sql script executed successfully.")
 
+async def get_dashboard_status()->bool:
+    query = """SELECT is_paused FROM dashboard_status where id = 1;"""
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            await cur.execute(query)
+            result = await cur.fetchone()
+            return result["is_paused"] if result else False
+
+async def toggle_status():
+    query = """
+        UPDATE dashboard_status 
+        SET is_paused = NOT is_paused, updated_at = CURRENT_TIMESTAMP 
+        WHERE id = 1
+        RETURNING is_paused;
+    """
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            await cur.execute(query)
+            result = await cur.fetchone()
+            await conn.commit()
+            return result["is_paused"] if result else False
+
+async def get_request_by_id(request_id: int):
+    """Retrieves full details of a specific raw request by ID."""
+    query = """
+        SELECT id, method, host, port, path, headers, raw_bytes 
+        FROM raw_requests 
+        WHERE id = %s;
+    """
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            await cur.execute(query, (request_id,))
+            row = await cur.fetchone()
+            return row if row else None
 
 async def get_pending_intercepts():
     """Receiving the list of pending requests for CLI / Web Dashboard."""

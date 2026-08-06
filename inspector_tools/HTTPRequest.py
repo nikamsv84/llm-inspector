@@ -82,6 +82,21 @@ class HTTPRequest:
 
         return cookie_dict
 
+    @property
+    def is_ai_endpoint(self) -> bool:
+        """Checks if the request is targeting a known AI API."""
+        ai_indicators = [
+            "api.openai.com", "api.anthropic.com", "localhost:11434",  # Ollama
+            "/v1/chat/completions", "/api/chat", "/v1/messages"
+        ]
+        host = self.headers.get("host", "")
+        path = self.path.lower()
+
+        for indicator in ai_indicators:
+            if indicator in host or indicator in path:
+                return True
+        return False
+
 
 if __name__ == "__main__":
 
