@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
   packet: {
@@ -23,12 +23,15 @@ const editableFields = ref({
 })
 
 const bodyValue = ref('')
+const modifiedHeaders = ref({}) // برای ذخیره هدرهای ویرایش شده در Combo Box
 
 const selectedField = ref(null)
 const editingValue = ref('')
+const selectedHeaderKey = ref(null) // برای ردیگیری اینکه کدام هدر در حال ویرایش است
 
 function initEditors() {
   if (!props.packet) return
+
   editableFields.value = {
     method: props.packet.method || '',
     path: props.packet.path || '',
@@ -38,8 +41,13 @@ function initEditors() {
     target_port: props.packet.target_port || ''
   }
   bodyValue.value = props.packet.body || ''
+
+  // کپی کردن هدرها برای ویرایش محلی
+  modifiedHeaders.value = { ...(props.packet.headers || {}) }
+
   selectedField.value = null
   editingValue.value = ''
+  selectedHeaderKey.value = null
 }
 
 watch(() => props.packet?.id, initEditors, { immediate: true })
@@ -53,14 +61,28 @@ const fieldLabels = {
   target_port: 'Port'
 }
 
+// کلیک روی فیلدهای دسترسی سریع
 function selectField(key) {
   selectedField.value = key
+  selectedHeaderKey.value = null // اگر روی فیلد بالا کلیک کرد، هدر پایین دیسلکت بشه
   editingValue.value = String(editableFields.value[key])
 }
 
+// کلیک روی هدرهای داخل Combo Box
+function selectHeader(h_key) {
+  selectedHeaderKey.value = h_key
+  selectedField.value = null // اگر روی هدر کلیک کرد، فیلد بالا دیسلکت بشه
+  editingValue.value = String(modifiedHeaders.value[h_key] || '')
+}
+
+// دکمه Apply (برای هر دو حالت فیلدهای سریع و هدرها کار می‌کند)
 function applyFieldEdit() {
-  if (!selectedField.value) return
-  editableFields.value[selectedField.value] = editingValue.value
+  if (selectedField.value) {
+    editableFields.value[selectedField.value] = editingValue.value
+  } else if (selectedHeaderKey.value) {
+    // اعمال تغییرات روی هدر انتخاب شده در Combo Box
+    modifiedHeaders.value[selectedHeaderKey.value] = editingValue.value
+  }
 }
 
 function handleAction(action) {
@@ -73,7 +95,8 @@ function handleAction(action) {
     modified_query_params: editableFields.value.query_params,
     modified_target_host: editableFields.value.target_host,
     modified_target_port: editableFields.value.target_port,
-    modified_body: bodyValue.value
+    modified_body: bodyValue.value,
+    modified_headers: modifiedHeaders.value 
   })
 }
 </script>
@@ -91,8 +114,12 @@ function handleAction(action) {
     </div>
 
     <div v-else class="inspector-content">
+
+      <!-- Headers Section -->
       <div class="editor-block">
-        <div class="editor-title">Headers</div>
+        <div class="editor-title">Headers & Request Line</div>
+
+        <!-- Quick Edit Fields -->
         <div class="summary-row">
           <div
             v-for="key in ['method', 'path', 'http_version', 'query_params', 'target_host', 'target_port']"
@@ -104,7 +131,7 @@ function handleAction(action) {
             <span class="label">{{ fieldLabels[key] }}</span>
             <span
               class="value"
-              :class="key === 'method' ? 'badge ' + editableFields[key].toLowerCase() : key === 'path' ? 'path' : ''"
+              :class="key === 'method' ? 'badge ' + (editableFields[key] || '').toLowerCase() : key === 'path' ? 'path' : ''"
             >
               {{ editableFields[key] || '—' }}
             </span>
@@ -114,24 +141,42 @@ function handleAction(action) {
         <textarea
           v-model="editingValue"
           class="edit-area"
-          :disabled="selectedField === null"
+          :disabled="selectedField === null && selectedHeaderKey === null"
           spellcheck="false"
           rows="2"
-          :placeholder="selectedField ? 'Edit ' + fieldLabels[selectedField] : 'choose a field from the list above'"
+          :placeholder="selectedField ? 'Edit ' + fieldLabels[selectedField] : (selectedHeaderKey ? 'Edit ' + selectedHeaderKey : 'Select a field or header to edit')"
         ></textarea>
-        <button
-          class="apply-btn"
-          :disabled="selectedField === null"
-          @click="applyFieldEdit"
-        >
-          Apply header
-        </button>
-        <button
-        class="ai-generate-but" @click="openAIModal">
-        Generate with AI
-        </button>
+
+        <div class="btn-row">
+          <button class="apply-btn" :disabled="selectedField === null && selectedHeaderKey === null" @click="applyFieldEdit">
+            Apply header
+          </button>
+          <button class="ai-generate-but" @click="openAIModal">
+            Generate with AI
+          </button>
+        </div>
+
+        <!-- Unified Headers List (Combo Box) -->
+        <div class="unified-headers-box">
+          <div v-if="Object.keys(modifiedHeaders).length === 0" class="no-headers">
+            No headers found in this packet.
+          </div>
+          <div v-else>
+            <div
+              class="unified-header-row"
+              v-for="(value, h_key) in modifiedHeaders"
+              :key="h_key"
+              :class="{ 'header-selected': selectedHeaderKey === h_key }"
+              @click="selectHeader(h_key)"
+            >
+              <span class="h-key">{{ h_key }}:</span>
+              <span class="h-value">{{ value }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
+      <!-- Body Section -->
       <div class="editor-block">
         <div class="editor-title">Body</div>
         <textarea
@@ -139,10 +184,11 @@ function handleAction(action) {
           class="edit-area body-area"
           spellcheck="false"
           rows="6"
-          placeholder="the body is empty"
+          placeholder="The body is empty"
         ></textarea>
       </div>
 
+      <!-- Action Buttons -->
       <div class="action-bar">
         <button class="btn forward" @click="handleAction('forwarded')">
           Forward
@@ -154,6 +200,7 @@ function handleAction(action) {
           Drop
         </button>
       </div>
+
     </div>
   </div>
 </template>
@@ -296,6 +343,13 @@ function handleAction(action) {
   color: #9ca3af;
 }
 
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
 .apply-btn {
   align-self: flex-end;
   background: rgba(168, 85, 247, 0.15);
@@ -311,6 +365,61 @@ function handleAction(action) {
 
 .apply-btn:hover:not(:disabled) { opacity: 0.85; }
 .apply-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.unified-headers-box {
+  background: #0f0a1f;
+  border: 1px solid #1e1738;
+  border-radius: 10px;
+  padding: 8px 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  font-family: 'Fira Code', monospace;
+}
+
+.no-headers {
+  color: #64748b;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 10px;
+}
+
+.unified-header-row {
+  display: flex;
+  gap: 8px;
+  font-size: 0.75rem;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  border-bottom: 1px solid #15102a;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.unified-header-row:hover {
+  background: #1a1430;
+}
+
+.unified-header-row.header-selected {
+  background: #2e2150;
+  border: 1px solid #c084fc;
+}
+
+.unified-header-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.h-key {
+  color: #38bdf8;
+  min-width: 150px;
+  font-weight: 600;
+}
+
+.h-value {
+  color: #cbd5e1;
+  word-break: break-all;
+  flex: 1;
+}
 
 .action-bar {
   display: flex;
@@ -349,6 +458,7 @@ function handleAction(action) {
   color: #f87171;
   border: 1px solid #dc2626;
 }
+
 @keyframes ai-pulse {
   0%, 100% {
     border-color: #a21caf;

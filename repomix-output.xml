@@ -74,7 +74,10 @@ frontend/
       main_logo.png
       vite.svg
       vue.svg
+      x.png
     components/
+      AIAttackerModal.vue
+      BottomConsole.vue
       HeaderBar.vue
       PacketInspector.vue
       PacketTable.vue
@@ -332,6 +335,114 @@ from .db_manager import (
 
 <file path="frontend/src/assets/vue.svg">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="37.07" height="36" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 198"><path fill="#41B883" d="M204.8 0H256L128 220.8L0 0h97.92L128 51.2L157.44 0h47.36Z"></path><path fill="#41B883" d="m0 0l128 220.8L256 0h-51.2L128 132.48L50.56 0H0Z"></path><path fill="#35495E" d="M50.56 0L128 133.12L204.8 0h-47.36L128 51.2L97.92 0H50.56Z"></path></svg>
+</file>
+
+<file path="frontend/src/components/AIAttackerModal.vue">
+<template>
+  <div class="modal-overlay">
+    <div class="modal-box">
+
+      <!-- Close button with X icon -->
+      <button class="close-btn" @click="$emit('close')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <h3>AI Attacker</h3>
+      <p>Payload generator will appear here
+      coming soon....</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+// Define the event emitted to the parent component to close the modal
+defineEmits(['close']);
+</script>
+
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-box {
+  position: relative; /* Required for absolute positioning of the close button */
+  background: #15102a;
+  border: 1px solid #2e2348;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 400px;
+  color: #e2e8f0;
+}
+
+/* Close button specific styles */
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: #9976c9;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect for the close button */
+.close-btn:hover {
+  color: #8622de; /* Turns white */
+  background: rgba(255, 255, 255, 0.1); /* Slight background highlight */
+}
+</style>
+</file>
+
+<file path="frontend/src/components/BottomConsole.vue">
+<template>
+  <div class="console-container">
+    <div class="console-title">🖥️ Bottom Console</div>
+    <div class="console-placeholder">
+      Response logs and AI analysis will appear here.
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.console-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.console-title {
+  font-size: 0.85rem;
+  color: #c084fc;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.console-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 0.8rem;
+  border: 1px dashed #2e2348;
+  border-radius: 8px;
+}
+</style>
 </file>
 
 <file path="frontend/src/main.js">
@@ -894,428 +1005,6 @@ We selected **`psycopg3`** with `psycopg_pool.ConnectionPool` over SQLAlchemy OR
 ---
 </file>
 
-<file path="frontend/src/components/PacketInspector.vue">
-<script setup>
-import { ref, computed, watch } from 'vue'
-
-const props = defineProps({
-  packet: {
-    type: Object,
-    default: null
-  }
-})
-
-const emit = defineEmits(['action'])
-
-const editableFields = ref({
-  method: '',
-  path: '',
-  http_version: '',
-  query_params: '',
-  target_host: '',
-  target_port: ''
-})
-
-const bodyValue = ref('')
-
-const selectedField = ref(null)
-const editingValue = ref('')
-
-function initEditors() {
-  if (!props.packet) return
-  editableFields.value = {
-    method: props.packet.method || '',
-    path: props.packet.path || '',
-    http_version: props.packet.http_version || 'HTTP/1.1',
-    query_params: props.packet.query_params || '',
-    target_host: props.packet.target_host || '',
-    target_port: props.packet.target_port || ''
-  }
-  bodyValue.value = props.packet.body || ''
-  selectedField.value = null
-  editingValue.value = ''
-}
-
-watch(() => props.packet?.id, initEditors, { immediate: true })
-
-const fieldLabels = {
-  method: 'Method',
-  path: 'Path',
-  http_version: 'HTTP Version',
-  query_params: 'Query Params',
-  target_host: 'Host',
-  target_port: 'Port'
-}
-
-function selectField(key) {
-  selectedField.value = key
-  editingValue.value = String(editableFields.value[key])
-}
-
-function applyFieldEdit() {
-  if (!selectedField.value) return
-  editableFields.value[selectedField.value] = editingValue.value
-}
-
-function handleAction(action) {
-  emit('action', {
-    id: props.packet.id,
-    action,
-    modified_method: editableFields.value.method,
-    modified_path: editableFields.value.path,
-    modified_http_version: editableFields.value.http_version,
-    modified_query_params: editableFields.value.query_params,
-    modified_target_host: editableFields.value.target_host,
-    modified_target_port: editableFields.value.target_port,
-    modified_body: bodyValue.value
-  })
-}
-</script>
-
-<template>
-  <div class="inspector-container">
-    <div class="inspector-header">
-      <h3>🔍 Packet Inspector</h3>
-      <span v-if="packet" class="pkt-id-tag">ID: #{{ packet.id }}</span>
-    </div>
-
-    <div v-if="!packet" class="empty-state">
-      <span class="empty-icon">👈</span>
-      <p>Select a packet from the live stream to inspect details.</p>
-    </div>
-
-    <div v-else class="inspector-content">
-      <div class="editor-block">
-        <div class="editor-title">Headers</div>
-        <div class="summary-row">
-          <div
-            v-for="key in ['method', 'path', 'http_version', 'query_params', 'target_host', 'target_port']"
-            :key="key"
-            class="summary-item"
-            :class="{ selected: selectedField === key }"
-            @click="selectField(key)"
-          >
-            <span class="label">{{ fieldLabels[key] }}</span>
-            <span
-              class="value"
-              :class="key === 'method' ? 'badge ' + editableFields[key].toLowerCase() : key === 'path' ? 'path' : ''"
-            >
-              {{ editableFields[key] || '—' }}
-            </span>
-          </div>
-        </div>
-
-        <textarea
-          v-model="editingValue"
-          class="edit-area"
-          :disabled="selectedField === null"
-          spellcheck="false"
-          rows="2"
-          :placeholder="selectedField ? fieldLabels[selectedField] + ' رو تصحیح کن' : 'یک هدر رو از لیست بالا انتخاب کن'"
-        ></textarea>
-        <button
-          class="apply-btn"
-          :disabled="selectedField === null"
-          @click="applyFieldEdit"
-        >
-          Apply header
-        </button>
-      </div>
-
-      <div class="editor-block">
-        <div class="editor-title">Body</div>
-        <textarea
-          v-model="bodyValue"
-          class="edit-area body-area"
-          spellcheck="false"
-          rows="6"
-          placeholder="بدنه ریکوئست خالیه"
-        ></textarea>
-      </div>
-
-      <div class="action-bar">
-        <button class="btn forward" @click="handleAction('forwarded')">
-          Forward
-        </button>
-        <button class="btn modify" @click="handleAction('modified')">
-          Send modified
-        </button>
-        <button class="btn drop" @click="handleAction('dropped')">
-          Drop
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
-<style scoped>
-.inspector-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.inspector-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.inspector-header h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  color: #c084fc;
-}
-
-.pkt-id-tag {
-  font-size: 0.75rem;
-  background: #2e2348;
-  color: #d8b4fe;
-  padding: 2px 8px;
-  border-radius: 6px;
-  border: 1px solid #4c3a75;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  color: #64748b;
-  text-align: center;
-  padding: 20px;
-}
-
-.empty-icon {
-  font-size: 2rem;
-  margin-bottom: 8px;
-}
-
-.inspector-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 14px;
-  overflow-y: auto;
-}
-
-.editor-block {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.editor-title {
-  font-size: 0.7rem;
-  color: #a855f7;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.summary-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.summary-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px 10px;
-  background: #110d21;
-  border-radius: 6px;
-  border: 1px solid #1e1738;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.summary-item:hover {
-  border-color: #4c3a75;
-}
-
-.summary-item.selected {
-  background: #2e2150;
-  border-color: #c084fc;
-}
-
-.label {
-  color: #94a3b8;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-}
-
-.value {
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.value.path { color: #38bdf8; font-family: monospace; font-size: 0.75rem; }
-.value.badge.get { color: #60a5fa; }
-.value.badge.post { color: #34d399; }
-.value.badge.delete { color: #f87171; }
-.value.badge.put { color: #facc15; }
-
-.edit-area {
-  background: #110d21;
-  border: 1px solid #2e2348;
-  border-radius: 6px;
-  padding: 10px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.75rem;
-  color: #e2e8f0;
-  resize: vertical;
-}
-
-.edit-area:focus {
-  outline: none;
-  border-color: #7f77dd;
-}
-
-.edit-area:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.body-area {
-  background: #1a1a1a;
-  color: #9ca3af;
-}
-
-.apply-btn {
-  align-self: flex-end;
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border: 1px solid #7f77dd;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
-}
-
-.apply-btn:hover:not(:disabled) { opacity: 0.85; }
-.apply-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-.action-bar {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 8px;
-}
-
-.btn {
-  flex: 1;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
-}
-
-.btn:hover { opacity: 0.85; }
-
-.btn.forward {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid #059669;
-}
-
-.btn.modify {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border: 1px solid #7f77dd;
-}
-
-.btn.drop {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid #dc2626;
-}
-</style>
-</file>
-
-<file path="frontend/src/App.vue">
-<script setup>
-import { ref } from 'vue'
-import HeaderBar from './components/HeaderBar.vue'
-import PacketTable from './components/PacketTable.vue'
-import PacketInspector from './components/PacketInspector.vue'
-
-const currentSelectedPacket = ref(null)
-
-function onPacketSelected(packet) {
-  currentSelectedPacket.value = packet
-}
-</script>
-
-<template>
-  <div class="dashboard-container">
-
-    <HeaderBar />
-
-    <main class="main-zone">
-      <section class="table-zone">
-        <PacketTable @select-packet="onPacketSelected" />
-      </section>
-
-      <aside class="inspector-zone">
-        <PacketInspector :packet="currentSelectedPacket" />
-      </aside>
-    </main>
-
-  </div>
-</template>
-
-<style scoped>
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #0b0914;
-  color: #e2e8f0;
-  font-family: 'Inter', system-ui, sans-serif;
-  padding: 16px;
-  gap: 16px;
-  box-sizing: border-box;
-}
-
-.main-zone {
-  display: flex;
-  flex: 1;
-  gap: 16px;
-  overflow: hidden;
-}
-
-.table-zone {
-  flex: 2;
-  background: #15102a;
-  border: 1px solid #2e2348;
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.inspector-zone {
-  flex: 1;
-  background: #15102a;
-  border: 1px solid #2e2348;
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-}
-</style>
-</file>
-
 <file path="frontend/src/style.css">
 body {
   background-color: #0f0c1b;
@@ -1602,149 +1291,386 @@ if __name__ == "__main__":
     run_lab()
 </file>
 
-<file path="dashboard/api.py">
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from typing import Any, Optional, List
-from pydantic import BaseModel, ConfigDict
-from fastapi.middleware.cors import CORSMiddleware
-from webview import *
-from database.db_manager import (
-    init_db,
-    get_pending_intercepts,
-    open_pool,
-    close_pool,
-    get_dashboard_status,
-    toggle_status
-)
+<file path="frontend/src/components/PacketInspector.vue">
+<script setup>
+import { ref, computed, watch } from 'vue'
 
-class PacketNotifyPayload(BaseModel):
-    id: int
-    time: str
-    method: str
-    path: str
-    status: int | str
-    risk: str
+const props = defineProps({
+  packet: {
+    type: Object,
+    default: null
+  }
+})
 
+const emit = defineEmits(['action', 'open-ai-modal'])
+function openAIModal() {
+  emit('open-ai-modal')
+}
 
-#websocket management->
-from contextlib import asynccontextmanager
+const editableFields = ref({
+  method: '',
+  path: '',
+  http_version: '',
+  query_params: '',
+  target_host: '',
+  target_port: ''
+})
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: List[WebSocket] = []
+const bodyValue = ref('')
 
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
+const selectedField = ref(null)
+const editingValue = ref('')
 
-    def disconnect(self, websocket: WebSocket):
-        if websocket in self.active_connections:
-            self.active_connections.remove(websocket)
+function initEditors() {
+  if (!props.packet) return
+  editableFields.value = {
+    method: props.packet.method || '',
+    path: props.packet.path || '',
+    http_version: props.packet.http_version || 'HTTP/1.1',
+    query_params: props.packet.query_params || '',
+    target_host: props.packet.target_host || '',
+    target_port: props.packet.target_port || ''
+  }
+  bodyValue.value = props.packet.body || ''
+  selectedField.value = null
+  editingValue.value = ''
+}
 
-    async def broadcast(self, message: dict):
-        for connection in self.active_connections:
-            try:
-                await connection.send_json(message)
-            except Exception:
-                pass
-status_manager = ConnectionManager()
-packet_manager = ConnectionManager()
+watch(() => props.packet?.id, initEditors, { immediate: true })
 
-#pydentic schemas->
-class InterceptItem(BaseModel):
-    queue_id: int
-    request_id: int
-    method: str
-    host: str
-    port: int
-    path: str
-    headers: dict[str, Any] | str
-    raw_bytes: str | None = None
+const fieldLabels = {
+  method: 'Method',
+  path: 'Path',
+  http_version: 'HTTP Version',
+  query_params: 'Query Params',
+  target_host: 'Host',
+  target_port: 'Port'
+}
 
-    model_config = ConfigDict(from_attributes=True)
+function selectField(key) {
+  selectedField.value = key
+  editingValue.value = String(editableFields.value[key])
+}
 
-class InterceptActionRequest(BaseModel):
-    action: str
-    modified_method: Optional[str] = None
-    modified_path: Optional[str] = None
+function applyFieldEdit() {
+  if (!selectedField.value) return
+  editableFields.value[selectedField.value] = editingValue.value
+}
 
+function handleAction(action) {
+  emit('action', {
+    id: props.packet.id,
+    action,
+    modified_method: editableFields.value.method,
+    modified_path: editableFields.value.path,
+    modified_http_version: editableFields.value.http_version,
+    modified_query_params: editableFields.value.query_params,
+    modified_target_host: editableFields.value.target_host,
+    modified_target_port: editableFields.value.target_port,
+    modified_body: bodyValue.value
+  })
+}
+</script>
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await open_pool()
-    await init_db()
-    yield
-    await close_pool()
+<template>
+  <div class="inspector-container">
+    <div class="inspector-header">
+      <h3>🔍 Packet Inspector</h3>
+      <span v-if="packet" class="pkt-id-tag">ID: #{{ packet.id }}</span>
+    </div>
 
-app = FastAPI(title="Dashboard", lifespan=lifespan)
+    <div v-if="!packet" class="empty-state">
+      <span class="empty-icon">👈</span>
+      <p>Select a packet from the live stream to inspect details.</p>
+    </div>
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # یا ["http://localhost:5173"]
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-#websocket endpoint->
-@app.websocket("/ws/status")
-async def websocket_endpoint(websocket: WebSocket):
-    await status_manager.connect(websocket)
-    try:
-        while True:
-            await websocket.receive_text()
-    except WebSocketDisconnect:
-        status_manager.disconnect(websocket)
+    <div v-else class="inspector-content">
+      <div class="editor-block">
+        <div class="editor-title">Headers</div>
+        <div class="summary-row">
+          <div
+            v-for="key in ['method', 'path', 'http_version', 'query_params', 'target_host', 'target_port']"
+            :key="key"
+            class="summary-item"
+            :class="{ selected: selectedField === key }"
+            @click="selectField(key)"
+          >
+            <span class="label">{{ fieldLabels[key] }}</span>
+            <span
+              class="value"
+              :class="key === 'method' ? 'badge ' + editableFields[key].toLowerCase() : key === 'path' ? 'path' : ''"
+            >
+              {{ editableFields[key] || '—' }}
+            </span>
+          </div>
+        </div>
 
-@app.websocket("/ws/packets")
-async def packets_ws(websocket: WebSocket):
-    await packet_manager.connect(websocket)
-    try:
-        while True:
-            await websocket.receive_text()
-    except WebSocketDisconnect:
-        packet_manager.disconnect(websocket)
+        <textarea
+          v-model="editingValue"
+          class="edit-area"
+          :disabled="selectedField === null"
+          spellcheck="false"
+          rows="2"
+          :placeholder="selectedField ? 'Edit ' + fieldLabels[selectedField] : 'choose a field from the list above'"
+        ></textarea>
+        <button
+          class="apply-btn"
+          :disabled="selectedField === null"
+          @click="applyFieldEdit"
+        >
+          Apply header
+        </button>
+        <button
+        class="ai-generate-but" @click="openAIModal">
+        Generate with AI
+        </button>
+      </div>
 
-async def notify_new_packet(packet_data: dict):
-    await packet_manager.broadcast(packet_data)
+      <div class="editor-block">
+        <div class="editor-title">Body</div>
+        <textarea
+          v-model="bodyValue"
+          class="edit-area body-area"
+          spellcheck="false"
+          rows="6"
+          placeholder="the body is empty"
+        ></textarea>
+      </div>
 
-#headerBar endpoints:
-@app.get("/api/v1/system/status")
-async def system_status():
-    pending_intercepts = await get_pending_intercepts()
-    return {
-        "status": await get_dashboard_status(),
-        "pending_intercepts": len(pending_intercepts),
-    }
+      <div class="action-bar">
+        <button class="btn forward" @click="handleAction('forwarded')">
+          Forward
+        </button>
+        <button class="btn modify" @click="handleAction('modified')">
+          Send modified
+        </button>
+        <button class="btn drop" @click="handleAction('dropped')">
+          Drop
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
 
-@app.post("/api/v1/system/toggle-pause")
-async def toggle_system_pause():
-    new_is_paused = await toggle_status()
-    return {
-        "status": new_is_paused,
-        "message": "Pause Capture" if new_is_paused else "Resume Capture",
-    }
+<style scoped>
+.inspector-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
+.inspector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
 
-@app.post("/api/v1/internal/notify-packet")
-async def internal_notify_packet(packet: PacketNotifyPayload):
-    pending_intercepts = await get_pending_intercepts()
-    count = len(pending_intercepts)
-    await packet_manager.broadcast({
-        "type": "new_packet",
-        "packet": packet.model_dump()
-    })
+.inspector-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #c084fc;
+}
 
-    await status_manager.broadcast({
-        "pending_intercepts": count
-    })
-    return {"status": "ok", "pending_intercepts": count}
+.pkt-id-tag {
+  font-size: 0.75rem;
+  background: #2e2348;
+  color: #d8b4fe;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #4c3a75;
+}
 
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "name_of_project": "Dashboard",
-    }
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #64748b;
+  text-align: center;
+  padding: 20px;
+}
+
+.empty-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.inspector-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 14px;
+  overflow-y: auto;
+}
+
+.editor-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editor-title {
+  font-size: 0.7rem;
+  color: #a855f7;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: #110d21;
+  border-radius: 6px;
+  border: 1px solid #1e1738;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.summary-item:hover {
+  border-color: #4c3a75;
+}
+
+.summary-item.selected {
+  background: #2e2150;
+  border-color: #c084fc;
+}
+
+.label {
+  color: #94a3b8;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.value {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.value.path { color: #38bdf8; font-family: monospace; font-size: 0.75rem; }
+.value.badge.get { color: #60a5fa; }
+.value.badge.post { color: #34d399; }
+.value.badge.delete { color: #f87171; }
+.value.badge.put { color: #facc15; }
+
+.edit-area {
+  background: #110d21;
+  border: 1px solid #2e2348;
+  border-radius: 6px;
+  padding: 10px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  resize: vertical;
+}
+
+.edit-area:focus {
+  outline: none;
+  border-color: #7f77dd;
+}
+
+.edit-area:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.body-area {
+  background: #1a1a1a;
+  color: #9ca3af;
+}
+
+.apply-btn {
+  align-self: flex-end;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid #7f77dd;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.apply-btn:hover:not(:disabled) { opacity: 0.85; }
+.apply-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.action-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn:hover { opacity: 0.85; }
+
+.btn.forward {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid #059669;
+}
+
+.btn.modify {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid #7f77dd;
+}
+
+.btn.drop {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid #dc2626;
+}
+@keyframes ai-pulse {
+  0%, 100% {
+    border-color: #a21caf;
+    box-shadow: 0 0 4px rgba(217, 70, 239, 0.3);
+  }
+  50% {
+    border-color: #e879f9;
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.6);
+  }
+}
+
+.ai-generate-but {
+  background: rgba(217, 70, 239, 0.15);
+  color: #e879f9;
+  border: 1px solid #a21caf;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  animation: ai-pulse 2s ease-in-out infinite;
+}
+
+.ai-generate-but:hover {
+  animation-play-state: paused;
+  opacity: 0.85;
+}
+</style>
 </file>
 
 <file path="frontend/src/components/PacketTable.vue">
@@ -1970,6 +1896,116 @@ onUnmounted(() => {
 .risk-badge.low { background: #142820; color: #4ade80; }
 .risk-badge.medium { background: #33230a; color: #facc15; }
 .risk-badge.high { background: #331118; color: #f87171; }
+</style>
+</file>
+
+<file path="frontend/src/App.vue">
+<script setup>
+import { ref } from 'vue'
+import HeaderBar from './components/HeaderBar.vue'
+import PacketTable from './components/PacketTable.vue'
+import PacketInspector from './components/PacketInspector.vue'
+import BottomConsole from './components/BottomConsole.vue'
+import AIAttackerModal from './components/AIAttackerModal.vue'
+
+
+const currentSelectedPacket = ref(null)
+const showAIModal = ref(false)
+
+
+function onPacketSelected(packet) {
+  currentSelectedPacket.value = packet
+}
+</script>
+
+<template>
+  <div class="dashboard-container">
+
+    <HeaderBar />
+
+    <main class="main-zone">
+      <div class="left-column">
+        <section class="table-zone">
+          <PacketTable @select-packet="onPacketSelected" />
+        </section>
+
+        <section class="console-zone">
+          <BottomConsole />
+        </section>
+      </div>
+
+      <aside class="inspector-zone">
+        <PacketInspector
+  :packet="currentSelectedPacket"
+  @open-ai-modal="showAIModal = true"
+/>
+      </aside>
+    </main>
+    <AIAttackerModal v-if="showAIModal" @close="showAIModal = false"/>
+
+  </div>
+</template>
+
+<style scoped>
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #0b0914;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 16px;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.main-zone {
+  display: flex;
+  flex: 1;
+  gap: 16px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  gap: 16px;
+  min-height: 0;
+}
+
+.table-zone {
+  flex: 3;
+  background: #15102a;
+  border: 1px solid #2e2348;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.console-zone {
+  flex: 4;
+  background: #15102a;
+  border: 1px solid #2e2348;
+  border-radius: 8px;
+  padding: 16px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.inspector-zone {
+  flex: 1;
+  background: #15102a;
+  border: 1px solid #2e2348;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 </style>
 </file>
 
@@ -4655,6 +4691,151 @@ onUnmounted(() => {
 ]
 </file>
 
+<file path="dashboard/api.py">
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from typing import Any, Optional, List
+from pydantic import BaseModel, ConfigDict
+from fastapi.middleware.cors import CORSMiddleware
+from webview import *
+from database.db_manager import (
+    init_db,
+    get_pending_intercepts,
+    open_pool,
+    close_pool,
+    get_dashboard_status,
+    toggle_status
+)
+
+class PacketNotifyPayload(BaseModel):
+    id: int
+    time: str
+    method: str
+    path: str
+    status: int | str
+    risk: str
+
+
+#websocket management->
+from contextlib import asynccontextmanager
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: dict):
+        for connection in self.active_connections:
+            try:
+                await connection.send_json(message)
+            except Exception:
+                pass
+status_manager = ConnectionManager()
+packet_manager = ConnectionManager()
+
+#pydentic schemas->
+class InterceptItem(BaseModel):
+    queue_id: int
+    request_id: int
+    method: str
+    host: str
+    port: int
+    path: str
+    headers: dict[str, Any] | str
+    raw_bytes: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class InterceptActionRequest(BaseModel):
+    action: str
+    modified_method: Optional[str] = None
+    modified_path: Optional[str] = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await open_pool()
+    await init_db()
+    yield
+    await close_pool()
+
+app = FastAPI(title="Dashboard", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # یا ["http://localhost:5173"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+#websocket endpoint->
+@app.websocket("/ws/status")
+async def websocket_endpoint(websocket: WebSocket):
+    await status_manager.connect(websocket)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        status_manager.disconnect(websocket)
+
+@app.websocket("/ws/packets")
+async def packets_ws(websocket: WebSocket):
+    await packet_manager.connect(websocket)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        packet_manager.disconnect(websocket)
+
+async def notify_new_packet(packet_data: dict):
+    await packet_manager.broadcast(packet_data)
+
+#headerBar endpoints:
+@app.get("/api/v1/system/status")
+async def system_status():
+    pending_intercepts = await get_pending_intercepts()
+    return {
+        "status": await get_dashboard_status(),
+        "pending_intercepts": len(pending_intercepts),
+    }
+
+@app.post("/api/v1/system/toggle-pause")
+async def toggle_system_pause():
+    new_is_paused = await toggle_status()
+    return {
+        "status": new_is_paused,
+        "message": "Pause Capture" if new_is_paused else "Resume Capture",
+    }
+
+
+@app.post("/api/v1/internal/notify-packet")
+async def internal_notify_packet(packet: PacketNotifyPayload):
+    pending_intercepts = await get_pending_intercepts()
+    count = len(pending_intercepts)
+    await packet_manager.broadcast({
+        "type": "new_packet",
+        "packet": packet.model_dump()
+    })
+
+    await status_manager.broadcast({
+        "pending_intercepts": count
+    })
+    return {"status": "ok", "pending_intercepts": count}
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok",
+        "name_of_project": "Dashboard",
+    }
+</file>
+
 <file path="dashboard/app.py">
 import asyncio
 import json
@@ -5109,292 +5290,6 @@ if __name__ == "__main__":
 ---
 </file>
 
-<file path="frontend/src/components/HeaderBar.vue">
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-
-const isSystemActive = ref(true)
-const packetCount = ref(0)
-
-let socket = null
-let reconnectTimeout = null
-const RECONNECT_DELAY = 2000 // ms
-
-// 1. Fetch initial status and queue count from FastAPI (one-time snapshot on load)
-async function fetchCurrentStatus() {
-  try {
-    const response = await fetch('http://localhost:8000/api/v1/system/status', {
-      cache: 'no-store'
-    })
-    const data = await response.json()
-
-    // data.status is the `is_paused` value from get_dashboard_status()
-    // If status (is_paused) is true -> system is paused (isSystemActive = false)
-    isSystemActive.value = !data.status
-
-    // Initial queue count snapshot; live updates take over from here via WebSocket
-    packetCount.value = data.pending_intercepts
-  } catch (error) {
-    console.error('Failed to fetch initial status:', error)
-  }
-}
-
-// 2. Toggle status when the user clicks the button
-async function toggleSystem() {
-  try {
-    const response = await fetch('http://localhost:8000/api/v1/system/toggle-pause', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
-    const data = await response.json()
-
-    // Assuming toggle-pause returns { "is_paused": boolean } or similar boolean result
-    // If it returns an object like { "is_paused": true }, use data.is_paused or data directly
-    const pausedState = typeof data === 'object' && data !== null ? (data.is_paused ?? data.status) : data
-    isSystemActive.value = !pausedState
-
-  } catch (error) {
-    console.error('Failed to send toggle status request:', error)
-  }
-}
-
-// 3. Live packet count via WebSocket (backend broadcasts one message per new packet
-//    from notify_new_packet() in dashboard/api.py -> ConnectionManager.broadcast)
-function connectWebSocket() {
-  socket = new WebSocket('ws://localhost:8000/ws/packets')
-
-  socket.onopen = () => {
-    console.log('[ws] connected to /ws/packets')
-    if (reconnectTimeout) {
-      clearTimeout(reconnectTimeout)
-      reconnectTimeout = null
-    }
-  }
-
-  socket.onmessage = (event) => {
-    try {
-      const payload = JSON.parse(event.data)
-
-      // If the backend ever sends an explicit count/queue size, prefer that;
-      // otherwise treat each message as "one new packet arrived".
-      if (payload && typeof payload.pending_intercepts === 'number') {
-        packetCount.value = payload.pending_intercepts
-      } else if (payload && typeof payload.count === 'number') {
-        packetCount.value = payload.count
-      } else {
-        packetCount.value += 1
-      }
-    } catch (error) {
-      console.error('[ws] failed to parse message:', error)
-    }
-  }
-
-  socket.onerror = (error) => {
-    console.error('[ws] error:', error)
-  }
-
-  socket.onclose = () => {
-    console.warn('[ws] connection closed, retrying in', RECONNECT_DELAY, 'ms')
-    socket = null
-    reconnectTimeout = setTimeout(connectWebSocket, RECONNECT_DELAY)
-  }
-}
-
-onMounted(() => {
-  fetchCurrentStatus()
-  connectWebSocket()
-})
-
-onUnmounted(() => {
-  if (reconnectTimeout) clearTimeout(reconnectTimeout)
-  if (socket) {
-    socket.onclose = null // don't trigger reconnect on manual unmount
-    socket.close()
-  }
-})
-</script>
-
-<template>
-  <header class="header-container">
-    <div class="brand">
-      <div class="logo-wrapper">
-        <img src="../assets/main_logo.png" alt="AI Packet Inspector Logo" class="logo-img" />
-        <span class="logo-placeholder"></span>
-      </div>
-      <div class="brand-titles">
-        <h1 class="main-title">LLM<span class="highlight">inspector</span></h1>
-        <span class="sub-title">PACKET INSPECTOR FOCUSED ON LLM APIS</span>
-      </div>
-    </div>
-
-    <div class="controls">
-      <div class="stat-badge">
-        <span class="stat-label">Queue:</span>
-        <span class="stat-value">{{ packetCount }} pkts</span>
-      </div>
-
-      <div class="status-badge" :class="{ 'is-active': isSystemActive }">
-        <span class="pulse-dot"></span>
-        <span class="status-text">{{ isSystemActive ? 'INTERCEPTING' : 'PAUSED' }}</span>
-      </div>
-
-      <button @click="toggleSystem" class="toggle-btn" :class="{ 'btn-active': isSystemActive }">
-        {{ isSystemActive ? 'Pause Capture' : 'Resume Capture' }}
-      </button>
-    </div>
-  </header>
-</template>
-
-<style scoped>
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #15102a;
-  border: 1px solid #2e2348;
-  border-radius: 12px;
-  padding: 12px 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* Brand styling */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.logo-wrapper {
-  width: 44px;
-  height: 44px;
-  background: #23193e;
-  border: 1px solid #a855f7;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
-}
-
-.logo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  mix-blend-mode: screen;
-}
-
-.logo-placeholder {
-  font-size: 1.4rem;
-}
-
-.brand-titles {
-  display: flex;
-  flex-direction: column;
-}
-
-.main-title {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-}
-
-.highlight {
-  color: #c084fc; /* Lilac accent */
-}
-
-.sub-title {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #a855f7;
-  letter-spacing: 2px;
-}
-
-/* Controls & Status */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.stat-badge {
-  background: #1e1738;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid #3b2d5e;
-  font-size: 0.85rem;
-}
-
-.stat-label {
-  color: #94a3b8;
-  margin-right: 6px;
-}
-
-.stat-value {
-  color: #e2e8f0;
-  font-weight: 600;
-}
-
-.status-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.status-badge.is-active {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.3);
-  color: #34d399;
-}
-
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #ef4444;
-}
-
-.status-badge.is-active .pulse-dot {
-  background-color: #10b981;
-  box-shadow: 0 0 8px #10b981;
-}
-
-/* Toggle button */
-.toggle-btn {
-  background: #2e2348;
-  color: #e2e8f0;
-  border: 1px solid #4c3a75;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.toggle-btn:hover {
-  background: #3b2d5e;
-  border-color: #a855f7;
-}
-
-.toggle-btn.btn-active {
-  border-color: #34d399;
-}
-</style>
-</file>
-
 <file path="test.py">
 import time
 import sys
@@ -5760,6 +5655,323 @@ if __name__ == "__main__":
     asyncio.run(main())
 </file>
 
+<file path="frontend/src/components/HeaderBar.vue">
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const isSystemActive = ref(true)
+const packetCount = ref(0)
+
+let socket = null
+let reconnectTimeout = null
+const RECONNECT_DELAY = 2000 // ms
+
+// 1. Fetch initial status and queue count from FastAPI (one-time snapshot on load)
+async function fetchCurrentStatus() {
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/system/status', {
+      cache: 'no-store'
+    })
+    const data = await response.json()
+
+    // data.status is the `is_paused` value from get_dashboard_status()
+    // If status (is_paused) is true -> system is paused (isSystemActive = false)
+    isSystemActive.value = !data.status
+
+    // Initial queue count snapshot; live updates take over from here via WebSocket
+    packetCount.value = data.pending_intercepts
+  } catch (error) {
+    console.error('Failed to fetch initial status:', error)
+  }
+}
+
+// 2. Toggle status when the user clicks the button
+async function toggleSystem() {
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/system/toggle-pause', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const data = await response.json()
+
+    // Assuming toggle-pause returns { "is_paused": boolean } or similar boolean result
+    // If it returns an object like { "is_paused": true }, use data.is_paused or data directly
+    const pausedState = typeof data === 'object' && data !== null ? (data.is_paused ?? data.status) : data
+    isSystemActive.value = !pausedState
+
+  } catch (error) {
+    console.error('Failed to send toggle status request:', error)
+  }
+}
+
+// 3. Live packet count via WebSocket (backend broadcasts one message per new packet
+//    from notify_new_packet() in dashboard/api.py -> ConnectionManager.broadcast)
+function connectWebSocket() {
+  socket = new WebSocket('ws://localhost:8000/ws/packets')
+
+  socket.onopen = () => {
+    console.log('[ws] connected to /ws/packets')
+    if (reconnectTimeout) {
+      clearTimeout(reconnectTimeout)
+      reconnectTimeout = null
+    }
+  }
+
+  socket.onmessage = (event) => {
+    try {
+      const payload = JSON.parse(event.data)
+
+      // If the backend ever sends an explicit count/queue size, prefer that;
+      // otherwise treat each message as "one new packet arrived".
+      if (payload && typeof payload.pending_intercepts === 'number') {
+        packetCount.value = payload.pending_intercepts
+      } else if (payload && typeof payload.count === 'number') {
+        packetCount.value = payload.count
+      } else {
+        packetCount.value += 1
+      }
+    } catch (error) {
+      console.error('[ws] failed to parse message:', error)
+    }
+  }
+
+  socket.onerror = (error) => {
+    console.error('[ws] error:', error)
+  }
+
+  socket.onclose = () => {
+    console.warn('[ws] connection closed, retrying in', RECONNECT_DELAY, 'ms')
+    socket = null
+    reconnectTimeout = setTimeout(connectWebSocket, RECONNECT_DELAY)
+  }
+}
+
+onMounted(() => {
+  fetchCurrentStatus()
+  connectWebSocket()
+})
+
+onUnmounted(() => {
+  if (reconnectTimeout) clearTimeout(reconnectTimeout)
+  if (socket) {
+    socket.onclose = null // don't trigger reconnect on manual unmount
+    socket.close()
+  }
+})
+</script>
+
+<template>
+  <header class="header-container">
+    <div class="brand">
+      <div class="logo-wrapper">
+        <img src="../assets/main_logo.png" alt="AI Packet Inspector Logo" class="logo-img" />
+        <span class="logo-placeholder"></span>
+      </div>
+      <div class="brand-titles">
+        <h1 class="main-title">LLM<span class="highlight">inspector</span></h1>
+        <span class="sub-title">PACKET INSPECTOR FOCUSED ON LLM APIS</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="stat-badge">
+        <span class="stat-label">Queue:</span>
+        <span class="stat-value">{{ packetCount }} pkts</span>
+      </div>
+
+      <div class="status-badge" :class="{ 'is-active': isSystemActive }">
+        <span class="pulse-dot"></span>
+        <span class="status-text">{{ isSystemActive ? 'INTERCEPTING' : 'PAUSED' }}</span>
+      </div>
+
+      <button @click="toggleSystem" class="toggle-btn" :class="{ 'btn-active': isSystemActive }">
+        {{ isSystemActive ? 'Pause Capture' : 'Resume Capture' }}
+      </button>
+      <button class="gen-report-btn">
+      Generate Report
+      </button>
+    </div>
+  </header>
+</template>
+
+<style scoped>
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #15102a;
+  border: 1px solid #2e2348;
+  border-radius: 12px;
+  padding: 12px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Brand styling */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-wrapper {
+  width: 44px;
+  height: 44px;
+  background: #23193e;
+  border: 1px solid #a855f7;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+}
+
+.logo-placeholder {
+  font-size: 1.4rem;
+}
+
+.brand-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.highlight {
+  color: #c084fc; /* Lilac accent */
+}
+
+.sub-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #a855f7;
+  letter-spacing: 2px;
+}
+
+/* Controls & Status */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-badge {
+  background: #1e1738;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #3b2d5e;
+  font-size: 0.85rem;
+}
+
+.stat-label {
+  color: #94a3b8;
+  margin-right: 6px;
+}
+
+.stat-value {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.is-active {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ef4444;
+}
+
+.status-badge.is-active .pulse-dot {
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+/* Toggle button */
+.toggle-btn {
+  background: #2e2348;
+  color: #e2e8f0;
+  border: 1px solid #4c3a75;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: #3b2d5e;
+  border-color: #a855f7;
+}
+
+.toggle-btn.btn-active {
+  border-color: #34d399;
+}
+
+@keyframes report-pulse {
+  0%, 100% {
+    border-color: #6b21a8;
+    box-shadow: 0 0 4px rgba(147, 51, 234, 0.25);
+  }
+  50% {
+    border-color: #a855f7;
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+  }
+}
+
+.gen-report-btn {
+  background: rgba(147, 51, 234, 0.15);
+  color: #c4b5fd;
+  border: 1px solid #6b21a8;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  animation: report-pulse 2.5s ease-in-out infinite;
+}
+
+.gen-report-btn:hover {
+  animation-play-state: paused;
+  opacity: 0.85;
+}
+</style>
+</file>
+
 <file path=".gitignore">
 .venv/
 
@@ -5987,6 +6199,10 @@ async def handle_client(
                     "time": time.strftime("%H:%M:%S"),
                     "method": req.method,
                     "path": req.path,
+                    "http_version": req.http_version,
+                    "query_params": req.query_params,
+                    "target_host": req.target_host,
+                    "target_port": req.target_port,
                     "status": 200,
                     "risk": risk_level,
                 }

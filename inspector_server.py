@@ -107,19 +107,19 @@ async def handle_client(
         req = HTTPRequest(message)
 
         print("=" * 50)
+        print("=" * 50)
         print(f"[MINI-BURP INSPECTOR - CLIENT {client_id}]")
         print(f"    ▶ Method:       {req.method}")
         print(f"    ▶ Path:         {req.path}")
+        print(f"    ▶ Target:       {req.target_host}:{req.target_port}")
         print(f"    ▶ Cookie:       {req.cookies}")
         print(f"    ▶ Query Params: {req.query_params}")
-        print(f"    ▶ Host Header:  {req.headers.get('host', 'Unknown')}")
-        print(
-            "    ▶ User-Agent:  "
-            f" {req.headers.get('user-agent', 'Unknown')[:60]}..."
-        )
+
+        print(f"    ▶ All Headers:  {dict(req.headers)}")
+
         if req.body:
             print(f"    ▶ Body Data:    {req.body}")
-        print(f"{RED}" + "=" * 50 + f"{RESET}")
+        print("=" * 50)
 
         file_logger.log_request(req)
         security_result = security_analyze.analyze(req)
@@ -161,6 +161,8 @@ async def handle_client(
                     "query_params": req.query_params,
                     "target_host": req.target_host,
                     "target_port": req.target_port,
+                    "headers": dict(req.headers),
+                    "body": req.body,  
                     "status": 200,
                     "risk": risk_level,
                 }

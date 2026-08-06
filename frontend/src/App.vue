@@ -6,13 +6,45 @@ import PacketInspector from './components/PacketInspector.vue'
 import BottomConsole from './components/BottomConsole.vue'
 import AIAttackerModal from './components/AIAttackerModal.vue'
 
-
 const currentSelectedPacket = ref(null)
 const showAIModal = ref(false)
 
-
 function onPacketSelected(packet) {
   currentSelectedPacket.value = packet
+}
+
+async function onInspectorAction(payload) {
+  const { id, action, modified_body, modified_headers, modified_method, modified_path } = payload;
+
+  let apiPayload = {
+    request_id: id,
+    action: action
+  };
+
+  if (action === 'modified') {
+    apiPayload.modified_data = {
+      method: modified_method,
+      path: modified_path,
+      headers: modified_headers,
+      body: modified_body
+    }
+  }
+
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/intercept/release', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(apiPayload)
+    });
+
+    if (response.ok) {
+      console.log(`✅ Action '${action}' sent to backend for packet #${id}`);
+    } else {
+      console.error('❌ Backend returned an error:', response.statusText);
+    }
+  } catch (error) {
+    console.error('❌ Error sending action to backend:', error);
+  }
 }
 </script>
 
@@ -34,12 +66,14 @@ function onPacketSelected(packet) {
 
       <aside class="inspector-zone">
         <PacketInspector
-  :packet="currentSelectedPacket"
-  @open-ai-modal="showAIModal = true"
-/>
+          :packet="currentSelectedPacket"
+          @open-ai-modal="showAIModal = true"
+          @action="onInspectorAction"
+        />
       </aside>
     </main>
-    <AIAttackerModal v-if="showAIModal" @close="showAIModal = false"/>
+
+    <AIAttackerModal v-if="showAIModal" @close="showAIModal = false" />
 
   </div>
 </template>
@@ -95,7 +129,7 @@ function onPacketSelected(packet) {
 }
 
 .inspector-zone {
-  flex: 1;
+  flex: 2;
   background: #15102a;
   border: 1px solid #2e2348;
   border-radius: 12px;

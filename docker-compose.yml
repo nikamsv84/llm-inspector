@@ -5,6 +5,9 @@ services:
     tty: true
     ports:
       - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
     depends_on:
       postgres:
         condition: service_healthy # Wait for the database to be fully ready to accept connections

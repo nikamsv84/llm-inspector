@@ -9,7 +9,10 @@ from database.db_manager import (
     open_pool,
     close_pool,
     get_dashboard_status,
-    toggle_status
+    toggle_status,
+    save_modified_request,
+    release_intercepted_request
+
 )
 
 class PacketNotifyPayload(BaseModel):
@@ -19,6 +22,17 @@ class PacketNotifyPayload(BaseModel):
     path: str
     status: int | str
     risk: str
+    http_version: Optional[str] = "HTTP/1.1"
+    query_params: Optional[dict] = {}
+    target_host: Optional[str] = ""
+    target_port: Optional[Any] = 80
+    headers: Optional[dict] = {}
+    body: Optional[str] = ""
+
+class InterceptActionPayload(BaseModel):
+    request_id: int
+    action: str
+    modified_data: dict = None
 
 
 #websocket management->
@@ -133,6 +147,82 @@ async def internal_notify_packet(packet: PacketNotifyPayload):
         "pending_intercepts": count
     })
     return {"status": "ok", "pending_intercepts": count}
+
+
+from database.db_manager import get_request_by_id
+import json
+
+
+@app.get("/api/v1/requests/{request_id}")
+async def get_request_details(request_id: int):
+    req = await get_request_by_id(request_id)
+    if not req:
+        return {"error": "Request not found"}
+
+    headers = req.get("headers", {})
+    if isinstance(headers, str):
+        try:
+            headers = json.loads(headers)
+        except:
+            pass
+
+    return {
+        "id": req["id"],
+        "method": req["method"],
+        "path": req["path"],
+        "http_version": req.get("http_version", "HTTP/1.1"),
+        "target_host": req.get("target_host", ""),
+        "target_port": req.get("target_port", 80),
+        "query_params": req.get("query_params", {}),
+        "headers": headers,
+        "body": req.get("body", "")
+    }
+
+
+@app.post("/api/v1/intercept/release")
+async def release_intercept(payload: InterceptActionPayload):
+    request_id = payload.request_id
+    action = payload.action
+
+    if action == "modified" and payload.modified_data:
+        mod_data = payload.modified_data
+        headers = mod_data.get("headers", {})
+        body = mod_data.get("body", "")
+
+        method = mod_data.get("method", "POST")
+        path = mod_data.get("path", "/")
+
+        host = headers.get("host") or headers.get("Host") or "localhost"
+
+        raw_http = f"{method} {path} HTTP/1.1\r\n"
+        for k, v in headers.items():
+            if k.lower() not in ['host', 'content-length']:
+                raw_http += f"{k}: {v}\r\n"
+
+        raw_http += f"Host: {host}\r\n"
+
+        if body:
+            body_bytes = body.encode('utf-8')
+            raw_http += f"Content-Length: {len(body_bytes)}\r\n"
+        else:
+            body_bytes = b""
+
+        raw_http += "\r\n"
+
+        raw_bytes = raw_http.encode('utf-8') + body_bytes
+
+        await save_modified_request(
+            request_id=request_id,
+            method=method,
+            path=path,
+            headers=headers,
+            raw_bytes=raw_bytes
+        )
+    success = await release_intercepted_request(request_id, "forwarded" if action == "modified" else action)
+
+    if success:
+        return {"status": "ok", "message": f"Request {request_id} {action}"}
+    return {"status": "error", "message": "Failed to release request"}
 
 @app.get("/health")
 def health():

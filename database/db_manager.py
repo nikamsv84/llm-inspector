@@ -80,6 +80,19 @@ async def toggle_status():
             await conn.commit()
             return result["is_paused"] if result else False
 
+async def get_request_by_id(request_id: int):
+    """Retrieves full details of a specific raw request by ID."""
+    query = """
+        SELECT id, method, host, port, path, headers, raw_bytes 
+        FROM raw_requests 
+        WHERE id = %s;
+    """
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            await cur.execute(query, (request_id,))
+            row = await cur.fetchone()
+            return row if row else None
+
 async def get_pending_intercepts():
     """Receiving the list of pending requests for CLI / Web Dashboard."""
     query = """
