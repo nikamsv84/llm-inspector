@@ -13,3 +13,4 @@ exercises/
 clean_database.py
 debug_runner.py
 debug_test.py
+*.xml
