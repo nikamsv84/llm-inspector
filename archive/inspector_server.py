@@ -30,7 +30,7 @@ RESET = "\033[0m"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
-file_logger = JSONLogger("requests_log.json")
+file_logger = JSONLogger("../requests_log.json")
 security_analyze = Security_Analyzer()
 
 

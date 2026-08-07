@@ -5,7 +5,6 @@ services:
     tty: true
     ports:
       - "8080:8080"
-    # خط command را می‌توانی پاک کنی چون داکرفایل خودش تنظیم شده
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
