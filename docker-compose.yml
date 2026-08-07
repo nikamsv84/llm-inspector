@@ -5,19 +5,21 @@ services:
     tty: true
     ports:
       - "8080:8080"
+    # خط command را می‌توانی پاک کنی چون داکرفایل خودش تنظیم شده
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
     depends_on:
       postgres:
-        condition: service_healthy # Wait for the database to be fully ready to accept connections
+        condition: service_healthy
     environment:
-      - PYTHONPATH=/app # Ensures internal modules like inspector_tools are discoverable
-      - DB_HOST=postgres # Database service hostname within the Docker network
-      - DB_PORT=5432 # Internal PostgreSQL port (not the mapped 5433 host port)
+      - PYTHONPATH=/app
+      - DB_HOST=postgres
+      - DB_PORT=5432
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - .:/app
   dashboard_api:
     build: .
     command: uvicorn dashboard.api:app --host 0.0.0.0 --port 8000
