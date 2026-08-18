@@ -306,3 +306,63 @@
 * **Overhead جزیی شبکه:** برای هر پکت یک HTTP Request داخلی بین کانتینرها ارسال می‌شود (که در شبکه داخلی Docker بسیار سریع و ناچیز است).
 
 ---
+
+<div dir="rtl">
+# ADR 16: Dataset Strategy for AI Attack Detector
+
+* **تاریخ:** ۱۲ اوت ۲۰۲۶
+* **وضعیت:** پذیرفته‌شده (Accepted)
+* **ماژول‌ها:** AI Attack Detector (`inspector_tools/ai_attack_detector`), Trainer (`trainer.py`), Interceptor Proxy (`mitm_addon.py`)
+
+---
+
+### Context
+دیتاست اولیه‌ی `dataset.json` تنها ۴۰ نمونه (۲۰ benign، ۲۰ malicious) داشت که صرفاً برای تست عملکردی pipeline استفاده شده بود، نه برای دقت واقعی مدل. برای اینکه `Security_Analyzer` بتونه به‌صورت جدی حملات LLM (به‌ویژه Prompt Injection) رو تشخیص بده، نیاز به یک دیتاست بزرگ‌تر و متنوع‌تر بود. همچنین بررسی شد که آیا می‌توان تمام ۱۰ ریسک OWASP LLM Top 10 را از طریق یک دیتاست پوشش داد.
+
+### Decision
+1. **محدود کردن scope مدل** به ریسک‌هایی که از سطح متن یک HTTP request قابل تشخیص‌اند: عمدتاً **LLM01 (Prompt Injection)** و تا حدی LLM02 (Sensitive Information Disclosure) و LLM07 (System Prompt Leakage). ریسک‌هایی مثل Supply Chain، Model Poisoning و Excessive Agency از این scope خارج شدند چون ماهیت معماری/فرآیندی دارند و از متن یک درخواست تنها قابل استنتاج نیستند.
+2. استفاده از ترکیب دیتاست‌های عمومی (`neuralchemy/Prompt-injection-dataset` به‌عنوان core، تکمیل‌شده با زیرمجموعه‌هایی از `Necent/llm-jailbreak-prompt-injection-dataset`) برای training، و `PointGuardAI/Prompt-Injection-OWASP-Benchmark-V2` به‌عنوان benchmark مستقل evaluation.
+3. برای پوشش‌دادن به attack vector خاص پروژه (تزریق payload از طریق فیلدهای هدر HTTP به‌جای body)، به دلیل نبود دیتاست عمومی مناسب، تصمیم گرفته شد یک **dataset generator اختصاصی** ساخته شود که payloadهای شناخته‌شده‌ی prompt injection را به‌صورت سیستماتیک در هدرهای رایج (`User-Agent`, `Referer`, `X-Forwarded-For`, `X-Custom-*`) تزریق می‌کند.
+
+### Rationale
+1. **واقع‌بینی مقیاس‌پذیر:** تشخیص از سطح متن تنها برای ریسک‌هایی معنا دارد که ماهیت content-based دارند؛ ادعای پوشش کامل ۱۰ ریسک با یک classifier، معماری واقعی مسئله را نادیده می‌گیرد.
+2. **کیفیت بالاتر training:** دیتاست‌های عمومی انتخاب‌شده هزاران نمونه‌ی برچسب‌گذاری‌شده با دسته‌بندی attack type دارند، در مقابل ۴۰ نمونه‌ی فعلی.
+3. **Fit معماری:** چون پروژه در سطح HTTP proxy عمل می‌کند، تمرکز روی attack vector مبتنی بر هدر مستقیماً با موقعیت پروژه در stack هم‌راستاست و یک gap واقعی در دیتاست‌های عمومی موجود را پر می‌کند.
+
+---
+
+## 🚀 Key Learning Takeaways for Today
+* تفاوت بین ریسک‌های content-based (قابل تشخیص با classifier) و ریسک‌های architecture-based در OWASP LLM Top 10.
+* اهمیت جداسازی training set از benchmark/evaluation set برای گزارش دقت واقع‌بینانه.
+* شناسایی gapهای دیتاست عمومی و طراحی راهکار synthetic-generation برای پرکردن آن.
+---
+# ADR 17: Decoupling Model Training Pipeline from Production Proxy
+
+* **تاریخ:** ۱۲ اوت ۲۰۲۶
+* **وضعیت:** پذیرفته‌شده (Accepted)
+* **ماژول‌ها:** AI Attack Detector (`inspector_tools/ai_attack_detector`), Trainer (خارج از این ریپو), Analyzer (`analyzer.py`)
+
+---
+
+### Context
+برای بهبود دقت `Security_Analyzer`، نیاز به یک دیتاست بزرگ‌تر و pipeline جدی‌تری برای training بود (دانلود دیتاست از Hugging Face، ساخت دیتاست synthetic برای هدرها، fit کردن مدل). این نیازمندی‌ها (`datasets`, `pandas`, و ابزارهای exploration) صرفاً برای فاز training لازم‌اند و هیچ‌گاه در runtime پروکسی استفاده نمی‌شوند.
+
+### Decision
+Training pipeline (دانلود دیتاست، dataset generator اختصاصی هدرها، fit مدل) در یک **پروژه و مخزن کاملاً مجزا** از پروژه‌ی اصلی proxy انجام می‌شود. تنها artifact نهایی (`model.pkl`) به همراه `analyzer.py` (که مسئول لود و inference است) وارد پروژه‌ی اصلی می‌شود.
+
+### Rationale
+1. **جداسازی وابستگی‌ها (Dependency Isolation):** کانتینر production پروکسی نباید وابستگی‌های سنگین training (`datasets`, `pandas`, و غیره) را حمل کند؛ این‌ها فقط اندازه‌ی image را بزرگ می‌کنند بدون کاربرد در runtime.
+2. **جداسازی Concernها:** Training یک فرآیند offline و تکرارشونده است (ممکن است چندین بار با دیتاست‌ها و پارامترهای مختلف اجرا شود)، در حالی‌که Inference یک عملیات سبک و real-time در مسیر بحرانی پروکسی است. ترکیب این دو در یک codebase باعث می‌شود مرز مسئولیت‌ها گم شود.
+3. **قابلیت بازتولید (Reproducibility):** نگه‌داشتن pipeline training در یک پروژه‌ی مستقل، امکان مستندسازی جدا (dataset versioning، experiment tracking) را بدون شلوغ‌کردن تاریخچه‌ی commit پروژه‌ی اصلی proxy فراهم می‌کند.
+
+### Constraints / نکات هماهنگی
+* نسخه‌ی `scikit-learn` استفاده‌شده در training باید با نسخه‌ی نصب‌شده در `requirements.txt` پروژه‌ی اصلی سازگار باشد.
+* ساختار دقیق ورودی/خروجی مدل (raw classifier در برابر pipeline کامل شامل vectorizer) باید بین دو پروژه مستند و هماهنگ بماند.
+
+---
+
+## 🚀 Key Learning Takeaways for Today
+* اهمیت جداسازی pipeline آموزش مدل از سرویس production در معماری‌های ML.
+* تفاوت وابستگی‌های زمان build/training در برابر وابستگی‌های runtime.
+---
+</div>
