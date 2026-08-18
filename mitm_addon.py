@@ -5,6 +5,8 @@ import json
 import urllib.request
 import logging
 from mitmproxy import http, ctx
+
+import inspector_tools
 from database.db_manager import (
     init_db, open_pool, close_pool,
     save_raw_requests, create_intercept_entry,
@@ -38,6 +40,8 @@ class LLMInspectorAddon:
         req = HTTPRequest(fake_raw_msg)
 
         security_result = security_analyze.analyze(req)
+        logging_obj = inspector_tools.logger.JSONLogger("requests_log.json")
+        logging_obj.log_request(req)
 
         is_paused = await get_dashboard_status()
         if is_paused:
