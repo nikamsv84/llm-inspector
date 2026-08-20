@@ -2,7 +2,7 @@ from .HTTPRequest import HTTPRequest
 from .HTTPRequest import HTTPRequest
 
 
-class Security_Analyzer:
+class WebSecurityScanner:
     def __init__(self):
         # Database attack signatures (SQL Injection)
         self.sqli_signatures = [
