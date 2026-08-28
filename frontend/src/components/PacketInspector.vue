@@ -23,12 +23,10 @@ const editableFields = ref({
 })
 
 const bodyValue = ref('')
-const modifiedHeaders = ref({}) // برای ذخیره هدرهای ویرایش شده در Combo Box
-
+const modifiedHeaders = ref({})
 const selectedField = ref(null)
 const editingValue = ref('')
-const selectedHeaderKey = ref(null) // برای ردیگیری اینکه کدام هدر در حال ویرایش است
-
+const selectedHeaderKey = ref(null)
 function initEditors() {
   if (!props.packet) return
 
@@ -42,7 +40,6 @@ function initEditors() {
   }
   bodyValue.value = props.packet.body || ''
 
-  // کپی کردن هدرها برای ویرایش محلی
   modifiedHeaders.value = { ...(props.packet.headers || {}) }
 
   selectedField.value = null
@@ -61,14 +58,12 @@ const fieldLabels = {
   target_port: 'Port'
 }
 
-// کلیک روی فیلدهای دسترسی سریع
 function selectField(key) {
   selectedField.value = key
-  selectedHeaderKey.value = null // اگر روی فیلد بالا کلیک کرد، هدر پایین دیسلکت بشه
+  selectedHeaderKey.value = null
   editingValue.value = String(editableFields.value[key])
 }
 
-// کلیک روی هدرهای داخل Combo Box
 function selectHeader(h_key) {
   selectedHeaderKey.value = h_key
   selectedField.value = null // اگر روی هدر کلیک کرد، فیلد بالا دیسلکت بشه

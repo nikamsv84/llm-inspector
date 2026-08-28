@@ -35,6 +35,19 @@ CREATE TABLE IF NOT EXISTS dashboard_status (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT single_row_check CHECK (id = 1)
 );
+CREATE TABLE IF NOT EXISTS security_analyses (
+    id SERIAL PRIMARY KEY,
+    request_id BIGINT UNIQUE NOT NULL,
+    risk_score FLOAT NOT NULL,
+    risk_level VARCHAR(10) NOT NULL,
+    matched_patterns JSONB,
+    flags JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_raw_request_security
+        FOREIGN KEY (request_id)
+        REFERENCES raw_requests(id) ON DELETE CASCADE
+);
 
 INSERT INTO dashboard_status (id, is_paused)
 VALUES (1, false)

@@ -1,8 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from typing import Any, Optional, List
+from typing import Any, Optional, List, Dict
 from pydantic import BaseModel, ConfigDict
 from fastapi.middleware.cors import CORSMiddleware
-from webview import *
 from database.db_manager import (
     init_db,
     get_pending_intercepts,
@@ -15,19 +14,21 @@ from database.db_manager import (
 
 )
 
+# در dashboard/api.py
 class PacketNotifyPayload(BaseModel):
     id: int
     time: str
     method: str
     path: str
-    status: int | str
-    risk: str
     http_version: Optional[str] = "HTTP/1.1"
-    query_params: Optional[dict] = {}
+    query_params: Optional[Dict[str, Any]] = {}
     target_host: Optional[str] = ""
-    target_port: Optional[Any] = 80
-    headers: Optional[dict] = {}
+    target_port: Optional[int] = 80
+    headers: Optional[Dict[str, Any]] = {}
     body: Optional[str] = ""
+    status: int
+    risk: str
+    security_details: Optional[Dict[str, Any]] = {}
 
 class InterceptActionPayload(BaseModel):
     request_id: int
@@ -89,7 +90,7 @@ app = FastAPI(title="Dashboard", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # یا ["http://localhost:5173"]
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -163,8 +164,15 @@ async def get_request_details(request_id: int):
     if isinstance(headers, str):
         try:
             headers = json.loads(headers)
-        except:
-            pass
+        except Exception:
+            headers = {}
+
+    security_details = req.get("security_details", {})
+    if isinstance(security_details, str):
+        try:
+            security_details = json.loads(security_details)
+        except Exception:
+            security_details = {}
 
     return {
         "id": req["id"],
@@ -175,7 +183,9 @@ async def get_request_details(request_id: int):
         "target_port": req.get("target_port", 80),
         "query_params": req.get("query_params", {}),
         "headers": headers,
-        "body": req.get("body", "")
+        "body": req.get("body", ""),
+        "risk": req.get("risk", "Low"),  
+        "security_details": security_details
     }
 
 

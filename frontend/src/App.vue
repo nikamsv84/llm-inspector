@@ -60,7 +60,7 @@ async function onInspectorAction(payload) {
         </section>
 
         <section class="console-zone">
-          <BottomConsole />
+          <BottomConsole :packet="currentSelectedPacket" />
         </section>
       </div>
 

@@ -52,6 +52,11 @@ class LLMInspectorAddon:
         security_context = security_analyzer.analyze(req)
 
         is_secure = security_context.risk_score < RISK_SCORE_THRESHOLD
+        sec_info_dict = {
+            "risk_score": getattr(security_context, "risk_score", 0.0),
+            "matched_patterns": getattr(security_context, "matched_patterns", []),
+            "flags": getattr(security_context, "flags", {}),
+        }
 
         logging_obj = inspector_tools.logger.JSONLogger("requests_log.json")
         logging_obj.log_request(req)
@@ -66,6 +71,7 @@ class LLMInspectorAddon:
 
         queue_id = await create_intercept_entry(request_id)
         logger.info(f"⏸️ [INTERCEPT] Request #{request_id} queued. Holding task...")
+
 
         try:
             risk_level = "High" if not is_secure else "Low"
@@ -82,6 +88,7 @@ class LLMInspectorAddon:
                 "body": req.body,
                 "status": 200,
                 "risk": risk_level,
+                "security_details": sec_info_dict,
             }
             def send_notify():
                 url = "http://dashboard_api:8000/api/v1/internal/notify-packet"
