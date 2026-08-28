@@ -5,6 +5,7 @@ import json
 import urllib.request
 import logging
 from mitmproxy import http, ctx
+from pathlib import Path
 
 import inspector_tools
 from database.db_manager import (
@@ -13,15 +14,22 @@ from database.db_manager import (
     wait_for_user_action, get_modified_request_bytes,
     get_dashboard_status
 )
-from inspector_tools import HTTPRequest, Security_Analyzer
+from inspector_tools import HTTPRequest
+from inspector_tools.model_loader import ModelLoader
+from inspector_tools.ml_analysis.analyzer import SecurityAnalyzer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 logger = logging.getLogger("LLMinspector")
 
-security_analyze = Security_Analyzer()
+RISK_SCORE_THRESHOLD = 0.5
 
 
 class LLMInspectorAddon:
+    def __init__(self):
+        model_dir_path = Path(__file__).parent / "models"
+        self.model_loader = ModelLoader(model_dir_path)
+        self.model_loader.load_models()
+
     async def running(self):
         logger.info("🚀 LLMinspector MITM Engine is running on port 8080...")
         try:
@@ -39,7 +47,17 @@ class LLMInspectorAddon:
         fake_raw_msg = f"{flow.request.method} {flow.request.path} {flow.request.http_version}\r\n{raw_headers}\r\n\r\n{flow.request.text or ''}"
         req = HTTPRequest(fake_raw_msg)
 
-        security_result = security_analyze.analyze(req)
+
+        security_analyzer = SecurityAnalyzer(self.model_loader)
+        security_context = security_analyzer.analyze(req)
+
+        is_secure = security_context.risk_score < RISK_SCORE_THRESHOLD
+        sec_info_dict = {
+            "risk_score": getattr(security_context, "risk_score", 0.0),
+            "matched_patterns": getattr(security_context, "matched_patterns", []),
+            "flags": getattr(security_context, "flags", {}),
+        }
+
         logging_obj = inspector_tools.logger.JSONLogger("requests_log.json")
         logging_obj.log_request(req)
 
@@ -54,8 +72,9 @@ class LLMInspectorAddon:
         queue_id = await create_intercept_entry(request_id)
         logger.info(f"⏸️ [INTERCEPT] Request #{request_id} queued. Holding task...")
 
+
         try:
-            risk_level = "High" if not security_result["is_secure"] else "Low"
+            risk_level = "High" if not is_secure else "Low"
             notify_payload = {
                 "id": request_id,
                 "time": time.strftime("%H:%M:%S"),
@@ -69,6 +88,7 @@ class LLMInspectorAddon:
                 "body": req.body,
                 "status": 200,
                 "risk": risk_level,
+                "security_details": sec_info_dict,
             }
             def send_notify():
                 url = "http://dashboard_api:8000/api/v1/internal/notify-packet"

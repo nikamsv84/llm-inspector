@@ -18,3 +18,5 @@ package-lock.json
 package.json
 requests_log.json
 node_modules/
+models/*.pkl
+test_e2e.py

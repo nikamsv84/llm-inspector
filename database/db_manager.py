@@ -152,6 +152,24 @@ async def create_intercept_entry(request_id: int) -> int:
             return row[0]
 
 
+async def save_security_analysis(request_id: int, security_context, risk_level: str):
+    async with pool.acquire() as conn:
+        query = """
+            INSERT INTO security_analyses (request_id, risk_score, risk_level, matched_patterns, flags)
+            VALUES ($1, $2, $3, $4, $5)
+        """
+        patterns_json = json.dumps(getattr(security_context, "matched_patterns", []))
+        flags_json = json.dumps(getattr(security_context, "flags", {}))
+
+        await conn.execute(
+            query,
+            request_id,
+            security_context.risk_score,
+            risk_level,
+            patterns_json,
+            flags_json
+        )
+
 async def wait_for_user_action(request_id: int, timeout: float = 300.0) -> str:
     """
     Asynchronously waits until released via in-memory asyncio.Event OR database status change.
